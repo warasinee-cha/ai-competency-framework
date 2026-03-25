@@ -1,0 +1,1295 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KMUTT AI Competency Framework for Staff</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Sarabun:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  :root {
+    --orange: #E84710;
+    --orange-light: #FF6B35;
+    --orange-pale: #FFF3EE;
+    --dark: #1A1A2E;
+    --gray: #6B7280;
+    --gray-light: #F4F4F5;
+    --white: #FFFFFF;
+    --dim-a: #E84710;
+    --dim-b: #F5A623;
+    --dim-c: #3B82F6;
+    --dim-d: #8B5CF6;
+    --dim-e: #10B981;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Sarabun', 'Inter', sans-serif;
+    color: var(--dark);
+    background: var(--white);
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(232,71,16,0.12);
+    padding: 0 2rem;
+    height: 56px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .nav-logo {
+    display: flex; align-items: center; gap: 10px;
+    font-weight: 800; font-size: 1rem; color: var(--orange);
+  }
+  .nav-logo .kmutt-badge {
+    background: var(--orange); color: white;
+    padding: 3px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.5px;
+  }
+  .nav-links {
+    display: flex; gap: 1.5rem; list-style: none;
+  }
+  .nav-links a {
+    text-decoration: none; color: var(--gray); font-size: 0.85rem; font-weight: 500;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--orange); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #1A1A2E 0%, #2D1B5E 35%, #E84710 100%);
+    display: flex; align-items: center; justify-content: center;
+    text-align: center; padding: 80px 2rem 4rem;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(circle at 30% 50%, rgba(232,71,16,0.3) 0%, transparent 60%),
+                radial-gradient(circle at 70% 30%, rgba(139,92,246,0.2) 0%, transparent 50%);
+  }
+  .hero-content { position: relative; z-index: 1; max-width: 800px; }
+  .hero-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: white; padding: 6px 16px; border-radius: 20px;
+    font-size: 0.8rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+  .hero h1 {
+    font-size: clamp(2.2rem, 5vw, 3.8rem);
+    font-weight: 900; color: white; line-height: 1.15;
+    margin-bottom: 1.2rem;
+  }
+  .hero h1 span { color: #FFB347; }
+  .hero p {
+    font-size: 1.15rem; color: rgba(255,255,255,0.8);
+    max-width: 580px; margin: 0 auto 2.5rem; line-height: 1.7;
+  }
+  .hero-stats {
+    display: flex; justify-content: center; gap: 3rem;
+    margin-bottom: 2.5rem;
+  }
+  .hero-stat { text-align: center; }
+  .hero-stat .number {
+    font-size: 2.5rem; font-weight: 900; color: white; line-height: 1;
+  }
+  .hero-stat .label {
+    font-size: 0.8rem; color: rgba(255,255,255,0.6); margin-top: 4px;
+  }
+  .hero-cta {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: white; color: var(--orange);
+    padding: 14px 28px; border-radius: 50px;
+    font-weight: 700; font-size: 1rem; text-decoration: none;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .hero-cta:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(0,0,0,0.4); }
+  .scroll-hint {
+    position: absolute; bottom: 2rem; left: 50%;
+    transform: translateX(-50%);
+    color: rgba(255,255,255,0.5); font-size: 0.75rem;
+    display: flex; flex-direction: column; align-items: center; gap: 6px;
+    animation: bounce 2s infinite;
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(6px); }
+  }
+
+  /* SECTIONS */
+  section { padding: 5rem 2rem; }
+  .container { max-width: 1100px; margin: 0 auto; }
+  .section-label {
+    font-size: 0.75rem; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--orange); margin-bottom: 0.75rem;
+  }
+  .section-title {
+    font-size: clamp(1.8rem, 3vw, 2.6rem); font-weight: 800;
+    color: var(--dark); margin-bottom: 1rem; line-height: 1.2;
+  }
+  .section-subtitle {
+    font-size: 1.05rem; color: var(--gray); max-width: 600px;
+    line-height: 1.7; margin-bottom: 3rem;
+  }
+
+  /* PERSONAS */
+  #personas { background: var(--gray-light); }
+  .personas-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+  }
+  .persona-card {
+    background: white; border-radius: 16px; padding: 2rem;
+    border: 2px solid transparent;
+    transition: all 0.3s; cursor: pointer;
+    position: relative; overflow: hidden;
+  }
+  .persona-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 4px;
+    background: var(--card-color);
+  }
+  .persona-card:hover {
+    border-color: var(--card-color);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.1);
+  }
+  .persona-card[data-persona="citizen"] { --card-color: #6B7280; }
+  .persona-card[data-persona="worker"] { --card-color: var(--orange); }
+  .persona-card[data-persona="professional"] { --card-color: #8B5CF6; }
+  .persona-card[data-persona="leader"] { --card-color: #F59E0B; }
+  .persona-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+  .persona-tag {
+    display: inline-block;
+    background: var(--card-color); color: white;
+    font-size: 0.7rem; font-weight: 700; padding: 3px 10px; border-radius: 20px;
+    text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 0.75rem;
+  }
+  .persona-card h3 { font-size: 1.2rem; font-weight: 800; margin-bottom: 0.5rem; }
+  .persona-card .role { font-size: 0.85rem; color: var(--gray); margin-bottom: 1rem; }
+  .persona-levels { display: flex; flex-direction: column; gap: 6px; }
+  .persona-level-row {
+    display: flex; align-items: center; gap: 8px; font-size: 0.78rem;
+  }
+  .dim-dot {
+    width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+  }
+  .dim-a { background: var(--dim-a); }
+  .dim-b { background: var(--dim-b); }
+  .dim-c { background: var(--dim-c); }
+  .dim-d { background: var(--dim-d); }
+  .dim-e { background: var(--dim-e); }
+  .level-name { color: var(--gray); flex: 1; }
+  .level-badge {
+    font-weight: 600; font-size: 0.72rem;
+    padding: 2px 8px; border-radius: 10px;
+  }
+  .level-awareness { background: #FEF3C7; color: #92400E; }
+  .level-working { background: #DBEAFE; color: #1E40AF; }
+  .level-practitioner { background: #EDE9FE; color: #5B21B6; }
+  .level-expert { background: #D1FAE5; color: #065F46; }
+  .level-optional { background: #F3F4F6; color: #6B7280; }
+
+  /* DIMENSIONS */
+  #dimensions { background: white; }
+  .dimensions-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  .dim-card {
+    border-radius: 16px; padding: 2rem;
+    border: 1px solid rgba(0,0,0,0.06);
+    transition: all 0.3s;
+  }
+  .dim-card:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,0,0,0.08); }
+  .dim-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+  .dim-letter {
+    width: 44px; height: 44px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem; font-weight: 900; color: white;
+  }
+  .dim-weight {
+    font-size: 1.6rem; font-weight: 900; opacity: 0.15;
+  }
+  .dim-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.5rem; }
+  .dim-card p { font-size: 0.85rem; color: var(--gray); line-height: 1.6; margin-bottom: 1rem; }
+  .dim-weight-bar {
+    height: 6px; border-radius: 3px; background: var(--gray-light);
+    overflow: hidden;
+  }
+  .dim-weight-fill {
+    height: 100%; border-radius: 3px;
+    transition: width 1s ease;
+  }
+  .dim-weight-label {
+    font-size: 0.72rem; color: var(--gray); margin-top: 4px; font-weight: 600;
+  }
+  .dim-sublabels { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 1rem; }
+  .dim-sublabel {
+    font-size: 0.72rem; padding: 3px 8px; border-radius: 8px;
+    font-weight: 500;
+  }
+
+  /* MATRIX */
+  #matrix { background: var(--gray-light); }
+  .matrix-wrapper { overflow-x: auto; border-radius: 16px; }
+  .matrix-table {
+    width: 100%; border-collapse: collapse;
+    background: white; border-radius: 16px; overflow: hidden;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+  }
+  .matrix-table th {
+    padding: 16px 20px; font-size: 0.85rem; font-weight: 700;
+    text-align: left;
+  }
+  .matrix-table th.persona-header {
+    background: var(--dark); color: white;
+  }
+  .matrix-table th.dim-header-th {
+    background: var(--gray-light); color: var(--dark);
+    border-right: 1px solid rgba(0,0,0,0.06);
+    white-space: nowrap;
+  }
+  .matrix-table td {
+    padding: 14px 20px; font-size: 0.82rem;
+    border-top: 1px solid rgba(0,0,0,0.05);
+    border-right: 1px solid rgba(0,0,0,0.05);
+  }
+  .matrix-table td.dim-cell {
+    font-weight: 600; display: flex; align-items: center; gap: 8px;
+  }
+  .matrix-badge {
+    display: inline-block; padding: 4px 12px; border-radius: 20px;
+    font-size: 0.75rem; font-weight: 600; white-space: nowrap;
+  }
+  .citizen-col { background: #FAFAFA; }
+  .worker-col { background: #FFF8F5; }
+  .professional-col { background: #FAF5FF; }
+  .leader-col { background: #FFFBEB; }
+
+  /* JOURNEY */
+  #journey { background: white; }
+  .journey-steps {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0; position: relative;
+  }
+  .journey-steps::before {
+    content: '';
+    position: absolute; top: 40px; left: 10%; right: 10%;
+    height: 2px; background: linear-gradient(90deg, var(--orange), #8B5CF6);
+    z-index: 0;
+  }
+  .journey-step {
+    display: flex; flex-direction: column; align-items: center;
+    text-align: center; padding: 0 1rem 2rem; position: relative; z-index: 1;
+  }
+  .step-circle {
+    width: 80px; height: 80px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    background: white; border: 3px solid var(--step-color);
+    margin-bottom: 1rem; font-size: 1.8rem;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+    transition: all 0.3s;
+  }
+  .journey-step:hover .step-circle {
+    background: var(--step-color); transform: scale(1.08);
+  }
+  .step-num {
+    font-size: 0.7rem; font-weight: 800; letter-spacing: 1px;
+    text-transform: uppercase; color: var(--step-color); margin-bottom: 4px;
+  }
+  .journey-step h4 { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.5rem; }
+  .journey-step p { font-size: 0.78rem; color: var(--gray); line-height: 1.5; }
+
+  /* ROLES */
+  #roles { background: var(--gray-light); }
+  .tabs {
+    display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap;
+  }
+  .tab-btn {
+    padding: 10px 20px; border-radius: 50px; border: 2px solid transparent;
+    background: white; font-size: 0.85rem; font-weight: 600;
+    cursor: pointer; transition: all 0.2s;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .tab-btn.active {
+    background: var(--orange); color: white; border-color: var(--orange);
+  }
+  .tab-btn:not(.active):hover {
+    border-color: var(--orange); color: var(--orange);
+  }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+  .role-panel {
+    background: white; border-radius: 20px; padding: 2.5rem;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+  }
+  .role-panel-header {
+    display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem;
+  }
+  .role-icon-big {
+    width: 60px; height: 60px; border-radius: 16px;
+    background: var(--orange-pale); display: flex; align-items: center; justify-content: center;
+    font-size: 1.8rem;
+  }
+  .role-panel-header h3 { font-size: 1.3rem; font-weight: 800; }
+  .role-panel-header p { font-size: 0.85rem; color: var(--gray); }
+  .role-dims-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+  }
+  .role-dim-card {
+    border-radius: 12px; padding: 1.2rem;
+    border: 1px solid rgba(0,0,0,0.06);
+  }
+  .role-dim-card h5 {
+    font-size: 0.78rem; font-weight: 700; margin-bottom: 0.5rem;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .role-dim-card .scenario { font-size: 0.82rem; color: var(--gray); margin-bottom: 0.5rem; }
+  .role-dim-card .expectation { font-size: 0.8rem; font-weight: 500; }
+
+  /* COMPETENCY BROWSER */
+  #browser { background: white; }
+  .browser-controls {
+    display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; align-items: center;
+  }
+  .browser-search {
+    flex: 1; min-width: 200px;
+    padding: 10px 16px; border-radius: 10px;
+    border: 1.5px solid rgba(0,0,0,0.1);
+    font-size: 0.9rem; font-family: inherit;
+    outline: none; transition: border-color 0.2s;
+  }
+  .browser-search:focus { border-color: var(--orange); }
+  .dim-filter-btn {
+    padding: 8px 16px; border-radius: 20px; border: 1.5px solid;
+    font-size: 0.78rem; font-weight: 600; cursor: pointer;
+    transition: all 0.2s; background: white;
+  }
+  .dim-filter-btn.active { color: white !important; }
+  .competency-table {
+    width: 100%; border-collapse: collapse;
+  }
+  .competency-table th {
+    text-align: left; padding: 12px 16px;
+    font-size: 0.78rem; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.5px; color: var(--gray);
+    border-bottom: 2px solid rgba(0,0,0,0.06);
+  }
+  .competency-table td {
+    padding: 12px 16px; font-size: 0.85rem;
+    border-bottom: 1px solid rgba(0,0,0,0.04);
+    vertical-align: top;
+  }
+  .competency-table tr:hover td { background: var(--orange-pale); }
+  .comp-dim-badge {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 4px 10px; border-radius: 8px; font-size: 0.75rem; font-weight: 700;
+    color: white; white-space: nowrap;
+  }
+  .comp-row { transition: background 0.15s; }
+  .comp-row.hidden { display: none; }
+
+  /* ASSESSMENT SECTION */
+  #assessment { background: linear-gradient(135deg, var(--dark) 0%, #2D1B5E 100%); color: white; }
+  #assessment .section-label { color: #FFB347; }
+  #assessment .section-title { color: white; }
+  #assessment .section-subtitle { color: rgba(255,255,255,0.7); }
+  .assessment-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 3rem;
+    align-items: center;
+  }
+  @media (max-width: 768px) { .assessment-grid { grid-template-columns: 1fr; } }
+  .assessment-info { }
+  .scale-items { display: flex; flex-direction: column; gap: 12px; margin-top: 1.5rem; }
+  .scale-item {
+    display: flex; align-items: center; gap: 16px;
+    background: rgba(255,255,255,0.08); border-radius: 12px; padding: 14px 18px;
+  }
+  .scale-num {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--orange); color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 1rem; flex-shrink: 0;
+  }
+  .scale-item .scale-label { font-weight: 700; font-size: 0.9rem; margin-bottom: 2px; }
+  .scale-item .scale-desc { font-size: 0.8rem; color: rgba(255,255,255,0.6); }
+  .radar-container {
+    background: rgba(255,255,255,0.05); border-radius: 20px; padding: 2rem;
+    max-width: 380px; margin: 0 auto;
+  }
+  .radar-container h4 { text-align: center; margin-bottom: 1rem; font-size: 0.9rem; opacity: 0.7; }
+
+  /* FOOTER */
+  footer {
+    background: var(--dark); color: rgba(255,255,255,0.5);
+    text-align: center; padding: 2rem;
+    font-size: 0.8rem;
+  }
+  footer strong { color: var(--orange); }
+
+  /* TRACKS */
+  .tracks-grid { display: flex; flex-direction: column; gap: 1.2rem; }
+  .track-persona-row {
+    display: flex; align-items: flex-start; gap: 1.2rem;
+    background: white; border-radius: 16px; padding: 1.4rem 1.6rem;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+  }
+  .track-persona-badge {
+    display: flex; align-items: center; gap: 8px;
+    border: 1.5px solid; border-radius: 50px;
+    padding: 6px 14px; font-size: 0.82rem; font-weight: 700;
+    white-space: nowrap; min-width: 160px; flex-shrink: 0;
+  }
+  .track-persona-dot {
+    width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+  }
+  .track-arrow {
+    font-size: 1.2rem; color: var(--gray); flex-shrink: 0;
+    margin-top: 6px;
+  }
+  .track-cards-row { display: flex; gap: 0.8rem; flex-wrap: wrap; flex: 1; }
+  .track-card {
+    flex: 1; min-width: 160px; border-radius: 12px; padding: 1rem 1.1rem;
+    border: 1.5px solid; transition: transform 0.2s;
+  }
+  .track-card:hover { transform: translateY(-2px); }
+  .track-card-flat {
+    background: var(--gray-light) !important;
+    max-width: 280px;
+  }
+  .track-id { font-size: 0.7rem; font-weight: 800; letter-spacing: 1px; margin-bottom: 4px; }
+  .track-name-th { font-size: 0.9rem; font-weight: 700; margin-bottom: 2px; color: var(--dark); }
+  .track-name-en { font-size: 0.72rem; font-weight: 600; color: var(--gray); margin-bottom: 0.5rem; }
+  .track-desc { font-size: 0.8rem; color: var(--gray); line-height: 1.55; }
+  .track-flat-label { font-size: 0.82rem; font-weight: 700; color: var(--gray); margin-bottom: 4px; }
+  .track-flat-sub { font-size: 0.78rem; color: var(--gray); line-height: 1.5; opacity: 0.8; }
+
+  /* WORKFORCE MATRIX */
+  .workforce-matrix {
+    background: white;
+    border-radius: 20px;
+    padding: 0 0 0.5rem;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  }
+  .matrix-axis-y {
+    text-align: center;
+    font-size: 0.72rem; font-weight: 700;
+    color: var(--gray); letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 1rem 0 0.5rem;
+  }
+  .matrix-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border: 1px solid rgba(0,0,0,0.08);
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 0 1.5rem;
+  }
+  .matrix-quadrant {
+    padding: 1.8rem;
+    min-height: 200px;
+  }
+  .q-worker { background: rgba(232,71,16,0.04); border-right: 1px solid rgba(0,0,0,0.08); border-bottom: 1px solid rgba(0,0,0,0.08); }
+  .q-leader { background: rgba(245,158,11,0.04); border-bottom: 1px solid rgba(0,0,0,0.08); }
+  .q-citizen { background: rgba(107,114,128,0.04); border-right: 1px solid rgba(0,0,0,0.08); }
+  .q-professional { background: rgba(139,92,246,0.04); }
+  .q-persona-label { font-size: 1rem; font-weight: 800; margin-bottom: 2px; }
+  .q-sublabel {
+    font-size: 0.7rem; font-weight: 600; opacity: 0.75;
+    margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .q-roles-list { display: flex; flex-wrap: wrap; gap: 6px; }
+  .q-role-tag {
+    font-size: 0.8rem; font-weight: 500;
+    padding: 5px 12px; border-radius: 20px;
+    border: 1.5px solid;
+  }
+  .matrix-axis-x {
+    display: flex; justify-content: space-between;
+    font-size: 0.72rem; font-weight: 700;
+    color: var(--gray); letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 0.75rem 1.5rem;
+  }
+
+  /* UTILITIES */
+  .highlight { color: var(--orange); }
+  .fade-in {
+    opacity: 0; transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <span class="kmutt-badge">KMUTT</span>
+    AI Competency Framework
+  </div>
+  <ul class="nav-links">
+    <li><a href="#rationale">Rationale</a></li>
+    <li><a href="#personas">Personas &amp; Dimensions</a></li>
+    <li><a href="#roles">Persona Map</a></li>
+    <li><a href="#tracks">Tracks</a></li>
+    <li><a href="#browser">Competencies</a></li>
+    <li><a href="#journey">Journey</a></li>
+    <li><a href="#assessment">Assessment</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-content">
+    <h1>KMUTT<br><span>AI Competency</span><br>Framework</h1>
+    <p>A structured, role-based framework to assess, develop, and recognise AI capabilities across all staff groups.</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="number">4</div><div class="label">Personas</div></div>
+      <div class="hero-stat"><div class="number">5</div><div class="label">Dimensions</div></div>
+      <div class="hero-stat"><div class="number">67</div><div class="label">Competencies</div></div>
+      <div class="hero-stat"><div class="number">4</div><div class="label">Levels</div></div>
+    </div>
+    <a href="#personas" class="hero-cta">Explore the Framework ↓</a>
+  </div>
+  <div class="scroll-hint">
+    <span>Scroll to explore</span>
+    <span>↓</span>
+  </div>
+</section>
+
+<!-- RATIONALE -->
+<section id="rationale" style="background: var(--white);">
+  <div class="container">
+    <div class="fade-in">
+      <p class="section-label">เหตุผลและที่มา</p>
+      <h2 class="section-title">ทำไมมหาวิทยาลัยต้องมี<br>AI Competency Framework?</h2>
+      <p class="section-subtitle">การนำ AI เข้ามาในองค์กรโดยไม่มีกรอบความสามารถที่ชัดเจน จะนำไปสู่สิ่งที่เรียกว่า <strong style="color:var(--orange);">"value leakage"</strong> — ต้นทุนของเครื่องมือและความเสี่ยงจากข้อผิดพลาดมีน้ำหนักมากกว่าประโยชน์ที่ได้รับ KMUTT จึงพัฒนา AI Competency Framework โดยยึดหลักการจาก <strong>Alan Turing Institute</strong> สถาบันวิจัยชั้นนำด้าน AI ของสหราชอาณาจักร</p>
+    </div>
+
+    <!-- 3 Principles from Alan Turing -->
+    <div class="fade-in" style="margin-bottom: 3rem;">
+      <p style="font-size:0.78rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--gray); margin-bottom:1.2rem;">หลักการออกแบบ 3 ข้อ — Alan Turing Institute</p>
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:1.2rem;">
+        <div style="border-radius:16px; padding:1.8rem; border:1.5px solid rgba(232,71,16,0.15); background:var(--orange-pale);">
+          <div style="font-size:2rem; margin-bottom:0.8rem;">🎯</div>
+          <h4 style="font-size:1rem; font-weight:800; margin-bottom:0.5rem; color:var(--orange);">People-First</h4>
+          <p style="font-size:0.88rem; color:var(--gray); line-height:1.6;">การนำ AI เข้ามาใช้คือความท้าทายด้านบุคลากร ไม่ใช่แค่ความท้าทายด้านเทคโนโลยี</p>
+        </div>
+        <div style="border-radius:16px; padding:1.8rem; border:1.5px solid rgba(59,130,246,0.15); background:#EFF6FF;">
+          <div style="font-size:2rem; margin-bottom:0.8rem;">🗂️</div>
+          <h4 style="font-size:1rem; font-weight:800; margin-bottom:0.5rem; color:var(--dim-c);">Role-Specific</h4>
+          <p style="font-size:0.88rem; color:var(--gray); line-height:1.6;">ทักษะถูกกำหนดตาม Persona ไม่ใช่ตำแหน่งงาน — ไม่ใช่ทุกคนต้องเขียนโค้ดเป็น</p>
+        </div>
+        <div style="border-radius:16px; padding:1.8rem; border:1.5px solid rgba(16,185,129,0.15); background:#ECFDF5;">
+          <div style="font-size:2rem; margin-bottom:0.8rem;">🌐</div>
+          <h4 style="font-size:1rem; font-weight:800; margin-bottom:0.5rem; color:var(--dim-e);">Holistic</h4>
+          <p style="font-size:0.88rem; color:var(--gray); line-height:1.6;">ความสามารถครอบคลุมทั้งด้าน Ethics และ Governance ไม่ใช่เพียงทักษะเทคนิค</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Value for Academia -->
+    <div class="fade-in">
+      <p style="font-size:0.78rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--gray); margin-bottom:1.2rem;">คุณค่าต่อมหาวิทยาลัย — "Business Value" ในบริบทวิชาการ</p>
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap:1.2rem; margin-bottom:2rem;">
+        <div style="border-radius:16px; padding:1.8rem; background:var(--gray-light); border:1px solid rgba(0,0,0,0.05);">
+          <div style="font-size:2rem; margin-bottom:0.8rem;">⚡</div>
+          <h4 style="font-size:1rem; font-weight:800; margin-bottom:0.5rem;">ประสิทธิภาพองค์กร</h4>
+          <p style="font-size:0.85rem; color:var(--gray); line-height:1.6;">ลดภาระงานซ้ำซ้อนด้วย AI เพื่อนำทรัพยากรไปสู่การเรียนการสอนและการวิจัยได้มากขึ้น</p>
+        </div>
+        <div style="border-radius:16px; padding:1.8rem; background:var(--gray-light); border:1px solid rgba(0,0,0,0.05);">
+          <div style="font-size:2rem; margin-bottom:0.8rem;">🛡️</div>
+          <h4 style="font-size:1rem; font-weight:800; margin-bottom:0.5rem;">การบริหารความเสี่ยง</h4>
+          <p style="font-size:0.85rem; color:var(--gray); line-height:1.6;">บุคลากรที่มีความสามารถป้องกันการละเมิดข้อมูลและความเสียหายต่อชื่อเสียงองค์กรจาก AI outputs ที่ไม่ถูกตรวจสอบ</p>
+        </div>
+        <div style="border-radius:16px; padding:1.8rem; background:var(--gray-light); border:1px solid rgba(0,0,0,0.05);">
+          <div style="font-size:2rem; margin-bottom:0.8rem;">💡</div>
+          <h4 style="font-size:1rem; font-weight:800; margin-bottom:0.5rem;">นวัตกรรม</h4>
+          <p style="font-size:0.85rem; color:var(--gray); line-height:1.6;">บุคลากรที่มีทักษะสามารถค้นพบการประยุกต์ใช้ AI แบบใหม่ เสริมความได้เปรียบเชิงแข่งขันของมหาวิทยาลัย</p>
+        </div>
+      </div>
+      <div style="background:linear-gradient(135deg, var(--dark) 0%, #2D1B5E 100%); border-radius:16px; padding:1.8rem 2rem; display:flex; align-items:flex-start; gap:1.2rem;">
+        <div style="font-size:1.8rem; flex-shrink:0;">📌</div>
+        <div>
+          <p style="color:rgba(255,255,255,0.95); font-size:0.92rem; line-height:1.7; margin-bottom:0.5rem;">Framework นี้พัฒนาโดยอ้างอิงจาก <strong style="color:#FFB347;">Alan Turing Institute's AI Skills for Business Framework (V2)</strong> — สถาบันแห่งชาติของสหราชอาณาจักรด้านวิทยาศาสตร์ข้อมูลและ AI และได้รับการปรับให้เหมาะสมกับบริบทมหาวิทยาลัยไทยโดยเฉพาะ</p>
+          <p style="color:rgba(255,255,255,0.5); font-size:0.78rem;">zenodo.org/records/11092677</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PERSONAS + DIMENSIONS -->
+<section id="personas" style="background: var(--gray-light);">
+  <div class="container">
+    <div class="fade-in">
+      <p class="section-label">กรอบความสามารถ</p>
+      <h2 class="section-title">4 Personas <span style="color:var(--gray); font-weight:300;">x</span> 5 Dimensions</h2>
+      <p class="section-subtitle">Framework นี้นิยาม "ความสามารถด้าน AI" ผ่านสองแกนหลัก — <strong>Persona</strong> กำหนดว่าคุณเป็นใครในบริบทการใช้ AI และ <strong>Dimension</strong> กำหนดว่าคุณต้องพัฒนาความสามารถด้านใด ทั้งสองต้องมองร่วมกันเสมอ</p>
+    </div>
+    <p style="font-size:0.75rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--orange); margin-bottom:1.2rem; margin-top:0.5rem;">4 Personas — กลุ่มบุคลากร</p>
+    <div class="personas-grid" style="margin-bottom:2.5rem;">
+      <div class="persona-card fade-in" data-persona="citizen">
+        <div class="persona-icon">&#128100;</div>
+        <span class="persona-tag">AI Citizen</span>
+        <h3>พลเมืองยุค AI</h3>
+        <p class="role">บุคลากรทั่วไปในองค์กร</p>
+        <p style="font-size:0.85rem; color:var(--gray); line-height:1.65; margin-top:0.75rem;">ใช้เทคโนโลยีดิจิทัลเป็นพื้นฐานในชีวิตการทำงาน ตระหนักถึงบทบาทและข้อจำกัดของ AI ในสังคม รู้จักความเสี่ยงด้านความปลอดภัยและจริยธรรมขั้นพื้นฐาน โดยเป็น "ผู้ใช้งานที่รู้เท่าทัน" (Critical Consumer) ไม่ใช่ผู้สร้างหรือผู้ขับเคลื่อนระบบ</p>
+      </div>
+      <div class="persona-card fade-in" data-persona="worker">
+        <div class="persona-icon">&#128188;</div>
+        <span class="persona-tag">AI Worker</span>
+        <h3>คนทำงานร่วมกับ AI</h3>
+        <p class="role">พนักงานสายงานทั่วไป</p>
+        <p style="font-size:0.85rem; color:var(--gray); line-height:1.65; margin-top:0.75rem;">ใช้ AI เป็นเครื่องมือเพิ่มประสิทธิภาพในงานประจำวัน ต้องมีวิจารณญาณ (Professional Judgement) ในการตรวจสอบผลลัพธ์จาก AI สามารถแยกแยะได้ว่างานส่วนใดเป็นความลับขององค์กรที่ต้องระมัดระวังเป็นพิเศษ</p>
+      </div>
+      <div class="persona-card fade-in" data-persona="professional">
+        <div class="persona-icon">&#128300;</div>
+        <span class="persona-tag">AI Professional</span>
+        <h3>ผู้เชี่ยวชาญด้าน AI</h3>
+        <p class="role">บุคลากรสายเทคนิค</p>
+        <p style="font-size:0.85rem; color:var(--gray); line-height:1.65; margin-top:0.75rem;">สร้างและดูแลระบบ AI ขององค์กรโดยตรง มีความรู้เชิงลึกด้านการออกแบบระบบ การเขียนโปรแกรม และการสร้างโมเดล รับผิดชอบด้านความปลอดภัยและมาตรฐานทางเทคนิคก่อนส่งมอบให้ผู้ใช้งาน</p>
+      </div>
+      <div class="persona-card fade-in" data-persona="leader">
+        <div class="persona-icon">&#127919;</div>
+        <span class="persona-tag">AI Leader</span>
+        <h3>ผู้บริหารกลยุทธ์ AI</h3>
+        <p class="role">ผู้บริหารระดับกลางและสูง</p>
+        <p style="font-size:0.85rem; color:var(--gray); line-height:1.65; margin-top:0.75rem;">กำหนดทิศทางและธรรมาภิบาล AI ขององค์กร เน้น vision, ethics, integrity และ responsible use ต้องมองเห็นภาพรวมว่า AI จะตอบโจทย์เป้าหมายองค์กรได้อย่างไร และรับผิดชอบการจัดสรรทรัพยากรและตัดสินใจเชิงนโยบาย</p>
+      </div>
+    </div>
+    <div class="fade-in" style="text-align:center; margin-bottom:2.5rem;">
+      <div style="display:inline-flex; align-items:center; gap:1rem; background:white; border:1.5px solid rgba(232,71,16,0.2); padding:0.85rem 2rem; border-radius:50px; box-shadow:0 2px 12px rgba(0,0,0,0.06);">
+        <span style="font-size:1.1rem; color:var(--orange);">&#8597;</span>
+        <p style="font-size:0.88rem; font-weight:600; color:var(--dark); margin:0;">แต่ละ Persona มีระดับความสามารถเป้าหมายที่แตกต่างกันใน 5 Dimensions ด้านล่าง</p>
+      </div>
+    </div>
+    <p style="font-size:0.75rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--orange); margin-bottom:1.2rem;">5 Dimensions — สิ่งที่วัด</p>
+    <div class="dimensions-grid">
+      <div class="dim-card fade-in" style="border-left: 4px solid var(--dim-a);">
+        <div class="dim-header">
+          <div class="dim-letter" style="background: var(--dim-a);">A</div>
+          <div class="dim-weight" style="color: var(--dim-a);">10%</div>
+        </div>
+        <h3>ความเป็นส่วนตัว<br>และการดูแลข้อมูล</h3>
+        <p style="font-size:0.75rem; font-weight:600; color:var(--dim-a); letter-spacing:0.3px; margin-bottom:0.75rem;">Privacy and Stewardship</p>
+        <p>ปกป้องและรักษาความปลอดภัยของข้อมูลที่มีความอ่อนไหว ปฏิบัติตามข้อกำหนดด้านกฎหมาย ระเบียบ และความปลอดภัย ยึดหลัก FAIR Guiding Principles ในการดูแลข้อมูล</p>
+        <div class="dim-sublabels">
+          <span class="dim-sublabel" style="background:#FEE2E2; color:#991B1B;">Data Protection</span>
+          <span class="dim-sublabel" style="background:#FEE2E2; color:#991B1B;">PDPA</span>
+          <span class="dim-sublabel" style="background:#FEE2E2; color:#991B1B;">Stewardship</span>
+        </div>
+      </div>
+      <div class="dim-card fade-in" style="border-left: 4px solid var(--dim-b);">
+        <div class="dim-header">
+          <div class="dim-letter" style="background: var(--dim-b);">B</div>
+          <div class="dim-weight" style="color: var(--dim-b);">10%</div>
+        </div>
+        <h3>วิศวกรรม<br>และการจัดการข้อมูล</h3>
+        <p style="font-size:0.75rem; font-weight:600; color:var(--dim-b); letter-spacing:0.3px; margin-bottom:0.75rem;">Data Specification &amp; Engineering</p>
+        <p>ความเข้าใจกระบวนการข้อมูลตั้งแต่การเก็บรวบรวม จัดเก็บ จนถึงการวิเคราะห์ ทักษะการจัดการ คัดกรอง และควบคุมคุณภาพข้อมูล เพื่อส่งมอบผลิตภัณฑ์ข้อมูลที่รองรับความต้องการ</p>
+        <div class="dim-sublabels">
+          <span class="dim-sublabel" style="background:#FEF3C7; color:#92400E;">Data Quality</span>
+          <span class="dim-sublabel" style="background:#FEF3C7; color:#92400E;">Transparency</span>
+          <span class="dim-sublabel" style="background:#FEF3C7; color:#92400E;">Management</span>
+        </div>
+      </div>
+      <div class="dim-card fade-in" style="border-left: 4px solid var(--dim-c);">
+        <div class="dim-header">
+          <div class="dim-letter" style="background: var(--dim-c);">C</div>
+          <div class="dim-weight" style="color: var(--dim-c);">20%</div>
+        </div>
+        <h3>การนิยามปัญหา<br>และการสื่อสาร</h3>
+        <p style="font-size:0.75rem; font-weight:600; color:var(--dim-c); letter-spacing:0.3px; margin-bottom:0.75rem;">Problem Definition &amp; Communication</p>
+        <p>นิยามปัญหาและสื่อสารแนวทางแก้ไขได้ทั้งกับกลุ่มเทคนิคและกลุ่มทั่วไป ระบุความต้องการ เกณฑ์ความสำเร็จ และความเสี่ยง รวมถึงบริหารความสัมพันธ์กับทีมงานและคู่ค้า</p>
+        <div class="dim-sublabels">
+          <span class="dim-sublabel" style="background:#DBEAFE; color:#1E40AF;">Prompt Writing</span>
+          <span class="dim-sublabel" style="background:#DBEAFE; color:#1E40AF;">Problem Framing</span>
+          <span class="dim-sublabel" style="background:#DBEAFE; color:#1E40AF;">Communication</span>
+        </div>
+      </div>
+      <div class="dim-card fade-in" style="border-left: 4px solid var(--dim-d);">
+        <div class="dim-header">
+          <div class="dim-letter" style="background: var(--dim-d);">D</div>
+          <div class="dim-weight" style="color: var(--dim-d);">40%</div>
+        </div>
+        <h3>การแก้ปัญหา<br>และวิเคราะห์ด้วย AI</h3>
+        <p style="font-size:0.75rem; font-weight:600; color:var(--dim-d); letter-spacing:0.3px; margin-bottom:0.75rem;">Problem Solving &amp; Analysis</p>
+        <p>เลือกใช้เครื่องมือและโซลูชัน AI เพื่อแก้ปัญหาตามความต้องการ เข้าใจความแตกต่างของสถาปัตยกรรม AI ต่างๆ และมีทักษะด้านการสร้าง ทดสอบ และประเมินโมเดล (สำหรับ AI Professional)</p>
+        <div class="dim-sublabels">
+          <span class="dim-sublabel" style="background:#EDE9FE; color:#5B21B6;">AI Tool Use</span>
+          <span class="dim-sublabel" style="background:#EDE9FE; color:#5B21B6;">Workflow</span>
+          <span class="dim-sublabel" style="background:#EDE9FE; color:#5B21B6;">Troubleshooting</span>
+        </div>
+      </div>
+      <div class="dim-card fade-in" style="border-left: 4px solid var(--dim-e);">
+        <div class="dim-header">
+          <div class="dim-letter" style="background: var(--dim-e);">E</div>
+          <div class="dim-weight" style="color: var(--dim-e);">20%</div>
+        </div>
+        <h3>การประเมินผล<br>และการสะท้อนคิด</h3>
+        <p style="font-size:0.75rem; font-weight:600; color:var(--dim-e); letter-spacing:0.3px; margin-bottom:0.75rem;">Evaluation &amp; Reflection</p>
+        <p>ประเมินผลลัพธ์จาก AI อย่างต่อเนื่อง นำหลักจริยธรรมมาใช้ด้วยความโปร่งใสและรับผิดชอบ สนับสนุนการตรวจสอบระบบ AI ติดตามนโยบาย AI Governance และช่วยควบคุมการใช้งาน AI อย่างไม่เหมาะสม</p>
+        <div class="dim-sublabels">
+          <span class="dim-sublabel" style="background:#D1FAE5; color:#065F46;">Critical Review</span>
+          <span class="dim-sublabel" style="background:#D1FAE5; color:#065F46;">AI Ethics</span>
+          <span class="dim-sublabel" style="background:#D1FAE5; color:#065F46;">Lifelong Learning</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PERSONA CLASSIFICATION -->
+<section id="roles" style="background: white;">
+  <div class="container">
+    <div class="fade-in">
+      <p class="section-label">ใครอยู่ใน Persona ไหน?</p>
+      <h2 class="section-title">Persona Classification</h2>
+      <p class="section-subtitle">KMUTT AI Workforce Alignment Matrix แสดงการจัดกลุ่มตำแหน่งงานจริงในมหาวิทยาลัยตาม Persona โดยพิจารณาจากความลึกทางเทคนิค (แกนนอน) และขอบเขตความรับผิดชอบ (แกนตั้ง)</p>
+    </div>
+    <div class="fade-in workforce-matrix">
+      <div class="matrix-axis-y">Strategic / Governance &#8593;</div>
+      <div class="matrix-body">
+        <div class="matrix-quadrant q-worker">
+          <div class="q-persona-label" style="color:var(--orange);">AI Worker</div>
+          <div class="q-sublabel" style="color:var(--orange);">Medium Tech + Operational</div>
+          <div class="q-roles-list">
+            <span class="q-role-tag" style="border-color:rgba(232,71,16,0.4); color:var(--orange); background:rgba(232,71,16,0.05);">เจ้าหน้าที่ admin</span>
+            <span class="q-role-tag" style="border-color:rgba(232,71,16,0.4); color:var(--orange); background:rgba(232,71,16,0.05);">นักวิจัยที่ไม่ใช่สาย deep tech</span>
+            <span class="q-role-tag" style="border-color:rgba(232,71,16,0.4); color:var(--orange); background:rgba(232,71,16,0.05);">อาจารย์ที่ไม่ได้เชี่ยวชาญ Data &amp; AI</span>
+          </div>
+        </div>
+        <div class="matrix-quadrant q-leader">
+          <div class="q-persona-label" style="color:#92400E;">AI Leader</div>
+          <div class="q-sublabel" style="color:#92400E;">Strategic + Governance</div>
+          <div class="q-roles-list">
+            <span class="q-role-tag" style="border-color:rgba(180,83,9,0.4); color:#92400E; background:rgba(245,158,11,0.06);">อธิการบดี</span>
+            <span class="q-role-tag" style="border-color:rgba(180,83,9,0.4); color:#92400E; background:rgba(245,158,11,0.06);">คณบดี / รองคณบดี / ผช.อธิการบดี</span>
+            <span class="q-role-tag" style="border-color:rgba(180,83,9,0.4); color:#92400E; background:rgba(245,158,11,0.06);">ผู้อำนวยการสำนัก</span>
+            <span class="q-role-tag" style="border-color:rgba(180,83,9,0.4); color:#92400E; background:rgba(245,158,11,0.06);">หัวหน้าภาควิชา</span>
+          </div>
+        </div>
+        <div class="matrix-quadrant q-citizen">
+          <div class="q-persona-label" style="color:#4B5563;">AI Citizen</div>
+          <div class="q-sublabel" style="color:#4B5563;">Low Tech + Operational</div>
+          <div class="q-roles-list">
+            <span class="q-role-tag" style="border-color:rgba(75,85,99,0.35); color:#4B5563; background:rgba(107,114,128,0.05);">หัวหน้า รปภ. / แม่บ้าน</span>
+            <span class="q-role-tag" style="border-color:rgba(75,85,99,0.35); color:#4B5563; background:rgba(107,114,128,0.05);">เจ้าหน้าที่ปฏิบัติการ</span>
+          </div>
+        </div>
+        <div class="matrix-quadrant q-professional">
+          <div class="q-persona-label" style="color:#5B21B6;">AI Professional</div>
+          <div class="q-sublabel" style="color:#5B21B6;">High Tech + Specialized</div>
+          <div class="q-roles-list">
+            <span class="q-role-tag" style="border-color:rgba(124,58,237,0.4); color:#5B21B6; background:rgba(139,92,246,0.05);">อ. สาย data/ai</span>
+            <span class="q-role-tag" style="border-color:rgba(124,58,237,0.4); color:#5B21B6; background:rgba(139,92,246,0.05);">นักวิจัยสาย data/ai</span>
+            <span class="q-role-tag" style="border-color:rgba(124,58,237,0.4); color:#5B21B6; background:rgba(139,92,246,0.05);">ทีม IT / วิศวกรคอมพิวเตอร์</span>
+          </div>
+        </div>
+      </div>
+      <div class="matrix-axis-x">
+        <span>&#8592; Consumer / User</span>
+        <span>Builder / Creator &#8594;</span>
+      </div>
+    </div>
+    <p class="fade-in" style="text-align:center; font-size:0.82rem; color:var(--gray); margin-top:1.5rem; font-style:italic;">* Persona ไม่ได้ผูกกับตำแหน่งงานอย่างตายตัว — บุคลากรหนึ่งคนสามารถผสม Persona ได้ตามบทบาทจริงของตน</p>
+  </div>
+</section>
+
+<!-- TRACKS -->
+<section id="tracks" style="background: var(--gray-light);">
+  <div class="container">
+    <div class="fade-in">
+      <p class="section-label">Framework ที่ขยายได้</p>
+      <h2 class="section-title">ขยายให้ตรงกับบทบาทจริง</h2>
+      <p class="section-subtitle">เฟรมเวิร์คหลักกำหนด 4 Personas เป็นโครงสร้างพื้นฐาน แต่บุคลากรในมหาวิทยาลัยมีบทบาทที่หลากหลายกว่านั้น องค์กรที่นำเฟรมเวิร์คไปใช้จึงสามารถ<strong>ขยาย</strong> P2 และ P3 ออกเป็น Tracks ย่อย เพื่อให้ Competency Requirements สะท้อนลักษณะงานจริงได้อย่างแม่นยำยิ่งขึ้น ในมุมมองของ KMUTT เราแบ่ง AI Worker ออกเป็น 3 Tracks ตามบทบาทหลักของบุคลากรสายสนับสนุนและวิชาการ และ AI Professional ออกเป็น 3 Tracks ตามทิศทางความเชี่ยวชาญ</p>
+    </div>
+
+    <div class="fade-in tracks-grid">
+
+      <!-- P2: AI Worker — 3 tracks -->
+      <div class="track-persona-row">
+        <div class="track-persona-badge" style="background:rgba(232,71,16,0.08); border-color:rgba(232,71,16,0.3); color:var(--orange);">
+          <span class="track-persona-dot" style="background:var(--orange);"></span>
+          <span>P2 · AI Worker</span>
+        </div>
+        <div class="track-arrow" style="color:var(--orange);">→</div>
+        <div class="track-cards-row">
+          <div class="track-card" style="border-color:rgba(232,71,16,0.25); background:rgba(232,71,16,0.03);">
+            <p class="track-id" style="color:var(--orange);">P2-0</p>
+            <p class="track-name-th">พนักงานสนับสนุนยุค AI</p>
+            <p class="track-name-en">AI for Administrator</p>
+            <p class="track-desc">ใช้ AI เพิ่มประสิทธิภาพงานประจำวัน รักษาวิจารณญาณและการดูแลข้อมูล</p>
+          </div>
+          <div class="track-card" style="border-color:rgba(232,71,16,0.25); background:rgba(232,71,16,0.03);">
+            <p class="track-id" style="color:var(--orange);">P2-1</p>
+            <p class="track-name-th">อาจารย์ยุค AI</p>
+            <p class="track-name-en">AI for Educator</p>
+            <p class="track-desc">บูรณาการ AI เข้ากับการสอนอย่างรับผิดชอบ รักษาการคิดวิเคราะห์ในกระบวนการเรียนรู้</p>
+          </div>
+          <div class="track-card" style="border-color:rgba(232,71,16,0.25); background:rgba(232,71,16,0.03);">
+            <p class="track-id" style="color:var(--orange);">P2-2</p>
+            <p class="track-name-th">นักวิจัยยุค AI</p>
+            <p class="track-name-en">AI for Researcher</p>
+            <p class="track-desc">รักษาความถูกต้องและโปร่งใสของงานวิจัย จัดการความเสี่ยงด้านจริยธรรม AI</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- P3: AI Professional — 3 tracks -->
+      <div class="track-persona-row">
+        <div class="track-persona-badge" style="background:rgba(91,33,182,0.07); border-color:rgba(91,33,182,0.3); color:#5B21B6;">
+          <span class="track-persona-dot" style="background:#5B21B6;"></span>
+          <span>P3 · AI Professional</span>
+        </div>
+        <div class="track-arrow" style="color:#5B21B6;">→</div>
+        <div class="track-cards-row">
+          <div class="track-card" style="border-color:rgba(91,33,182,0.25); background:rgba(139,92,246,0.03);">
+            <p class="track-id" style="color:#5B21B6;">P3-0</p>
+            <p class="track-name-th">วิชาชีพสายเทคนิค AI</p>
+            <p class="track-name-en">AI Technical Professional</p>
+            <p class="track-desc">ออกแบบ พัฒนา และดูแลระบบ AI รับผิดชอบคุณภาพและความปลอดภัยตลอด lifecycle</p>
+          </div>
+          <div class="track-card" style="border-color:rgba(91,33,182,0.25); background:rgba(139,92,246,0.03);">
+            <p class="track-id" style="color:#5B21B6;">P3-1</p>
+            <p class="track-name-th">วิชาชีพสายธุรกิจ AI</p>
+            <p class="track-name-en">AI Business Professional</p>
+            <p class="track-desc">กำหนดความต้องการ ตีความผลลัพธ์ AI เชื่อมโยงความต้องการองค์กรกับโซลูชัน</p>
+          </div>
+          <div class="track-card" style="border-color:rgba(91,33,182,0.25); background:rgba(139,92,246,0.03);">
+            <p class="track-id" style="color:#5B21B6;">P3-2</p>
+            <p class="track-name-th">วิชาชีพสายบริหารโครงการ AI</p>
+            <p class="track-name-en">AI Management Professional</p>
+            <p class="track-desc">นำการส่งมอบโครงการ AI ประสานงานระหว่างสายเทคนิคและธุรกิจ บริหารการเปลี่ยนแปลง</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- COMPETENCY BROWSER -->
+<style>
+/* ── Competency Browser ─────────────────────────────── */
+.cb-wrap { padding: 4rem 0 5rem; background: #f8f9fb; }
+.cb-personas { display:flex; gap:10px; flex-wrap:wrap; margin:2rem 0 1.25rem; }
+.cb-persona-btn {
+  display:flex; flex-direction:column; align-items:flex-start;
+  padding:10px 16px; border-radius:10px; border:2px solid transparent;
+  background:#fff; cursor:pointer; transition:.2s; text-align:left;
+  box-shadow:0 1px 3px rgba(0,0,0,.06);
+}
+.cb-persona-btn:hover { transform:translateY(-1px); box-shadow:0 3px 8px rgba(0,0,0,.1); }
+.cb-persona-btn.active { border-color:var(--cb-accent); background:var(--cb-bg); }
+.cb-pid { font-size:.72rem; font-weight:700; opacity:.6; letter-spacing:.05em; margin-bottom:2px; }
+.cb-pth { font-size:.92rem; font-weight:600; color:var(--cb-text); }
+.cb-pen { font-size:.75rem; color:#9ca3af; }
+.cb-tracks { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:1.25rem; }
+.cb-track-btn {
+  padding:6px 14px; border-radius:20px; border:1.5px solid #e5e7eb;
+  background:#fff; cursor:pointer; font-size:.82rem; color:#6b7280; transition:.2s;
+}
+.cb-track-btn:hover { border-color:var(--cb-accent); color:var(--cb-accent); }
+.cb-track-btn.active { border-color:var(--cb-accent); background:var(--cb-accent); color:#fff; font-weight:600; }
+.cb-view-row { display:flex; gap:0; margin-bottom:2rem; border-bottom:2px solid #e5e7eb; }
+.cb-view-btn {
+  padding:10px 20px; border:none; background:transparent; cursor:pointer;
+  font-size:.9rem; color:#9ca3af; border-bottom:2px solid transparent;
+  margin-bottom:-2px; transition:.15s; font-family:inherit;
+}
+.cb-view-btn:hover { color:#374151; }
+.cb-view-btn.active { color:var(--cb-accent); border-bottom-color:var(--cb-accent); font-weight:600; }
+/* Duty view */
+.cb-duties-list { display:flex; flex-direction:column; gap:12px; }
+.cb-duty-item {
+  display:flex; gap:16px; align-items:flex-start;
+  background:#fff; border-radius:10px; padding:16px 20px;
+  box-shadow:0 1px 3px rgba(0,0,0,.05); border-left:3px solid var(--cb-accent);
+}
+.cb-duty-num {
+  flex-shrink:0; width:28px; height:28px; border-radius:50%;
+  background:var(--cb-bg); color:var(--cb-accent); font-size:.78rem; font-weight:700;
+  display:flex; align-items:center; justify-content:center;
+}
+.cb-duty-th { font-size:.9rem; font-weight:500; color:#1f2937; margin:0 0 4px; line-height:1.55; }
+.cb-duty-en { font-size:.78rem; color:#9ca3af; margin:0; font-style:italic; }
+/* Competency view */
+.cb-comp-group { margin-bottom:2rem; }
+.cb-comp-duty-hdr {
+  display:flex; align-items:flex-start; gap:10px;
+  padding:10px 16px; background:#fff; border-radius:8px;
+  border-left:3px solid var(--cb-accent); margin-bottom:12px;
+  box-shadow:0 1px 3px rgba(0,0,0,.04);
+}
+.cb-comp-duty-id { flex-shrink:0; font-size:.7rem; font-weight:700; color:var(--cb-accent); padding-top:1px; opacity:.8; }
+.cb-comp-duty-text { font-size:.85rem; color:#374151; font-weight:500; line-height:1.5; }
+.cb-comp-cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:12px; }
+.cb-comp-card {
+  background:#fff; border-radius:10px; padding:14px 16px;
+  box-shadow:0 1px 3px rgba(0,0,0,.06); border-top:2px solid var(--dim-c2);
+}
+.cb-dim-badge {
+  display:inline-block; padding:2px 8px; border-radius:12px;
+  font-size:.68rem; font-weight:700; margin-bottom:8px;
+  border:1px solid var(--dim-c2); background:var(--dim-bg2); color:var(--dim-c2);
+}
+.cb-comp-short-th { font-size:.88rem; font-weight:600; color:#1f2937; margin:0 0 4px; line-height:1.5; }
+.cb-comp-short-en { font-size:.75rem; color:#9ca3af; margin:0; }
+/* Learning Outcomes view */
+.cb-lo-list { display:flex; flex-direction:column; gap:16px; }
+.cb-lo-row {
+  display:grid; grid-template-columns:1fr 2fr; gap:20px;
+  background:#fff; border-radius:10px; padding:18px 20px;
+  box-shadow:0 1px 3px rgba(0,0,0,.05);
+}
+@media(max-width:700px) { .cb-lo-row { grid-template-columns:1fr; } }
+.cb-lo-comp { border-right:1px solid #f3f4f6; padding-right:20px; }
+@media(max-width:700px) { .cb-lo-comp { border-right:none; padding-right:0; border-bottom:1px solid #f3f4f6; padding-bottom:14px; } }
+.cb-lo-comp-th { font-size:.88rem; font-weight:600; color:#1f2937; margin:8px 0 4px; line-height:1.5; }
+.cb-lo-comp-en { font-size:.74rem; color:#9ca3af; margin:0; }
+.cb-lo-outcome { }
+.cb-lo-hdr { font-size:.85rem; font-weight:700; color:#374151; margin:0 0 8px; }
+.cb-lo-bullets { margin:0; padding-left:1.2em; }
+.cb-lo-bullets li { font-size:.82rem; color:#4b5563; margin-bottom:5px; line-height:1.55; }
+</style>
+
+<section id="browser" class="cb-wrap">
+  <div class="container">
+    <div class="fade-in">
+      <p class="section-label">สำรวจ Competency Framework</p>
+      <h2 class="section-title">Competency Browser</h2>
+      <p class="section-subtitle">เลือก Persona และ Track เพื่อสำรวจ Duties, Competencies และ Learning Outcomes ที่กำหนดไว้ในเฟรมเวิร์ค</p>
+    </div>
+
+    <div class="cb-personas fade-in" id="cbPersonas"></div>
+    <div class="cb-tracks fade-in" id="cbTracks" style="display:none;"></div>
+
+    <div class="cb-view-row fade-in">
+      <button class="cb-view-btn active" data-view="duties">Duties</button>
+      <button class="cb-view-btn" data-view="competencies">Competencies</button>
+      <button class="cb-view-btn" data-view="outcomes">Learning Outcomes</button>
+    </div>
+
+    <div id="cbContent" class="fade-in"></div>
+  </div>
+</section>
+
+<script>
+(function(){
+const D={"personas": [{"id": "P1", "labelEN": "AI Citizen", "labelTH": "พลเมืองยุค AI"}, {"id": "P2", "labelEN": "AI Worker", "labelTH": "คนทำงานร่วมกับ AI"}, {"id": "P3", "labelEN": "AI Professional", "labelTH": "ผู้เชี่ยวชาญด้าน AI"}, {"id": "P4", "labelEN": "AI Leader", "labelTH": "ผู้บริหารกลยุทธ์ AI"}], "tracks": {"P1": [{"id": "P1-0", "nameEN": "AI Citizen", "nameTH": "พลเมือง AI"}], "P2": [{"id": "P2-0", "nameEN": "AI for Administrator", "nameTH": "พนักงานสนับสนุนยุค ​AI"}, {"id": "P2-1", "nameEN": "AI for Educator", "nameTH": "อาจารย์ยุค AI"}, {"id": "P2-2", "nameEN": "AI for Researcher", "nameTH": "นักวิจัยยุค AI"}], "P3": [{"id": "P3-0", "nameEN": "AI Technical Professional", "nameTH": "วิชาชีพสายเทคนิค AI"}, {"id": "P3-1", "nameEN": "AI Business Professional", "nameTH": "วิชาชีพสายธุรกิจ AI"}, {"id": "P3-2", "nameEN": "AI Management Professional", "nameTH": "วิชาชีพสายบริหารโครงการ AI"}], "P4": [{"id": "P4-0", "nameEN": "AI Leader", "nameTH": "ผู้นำองค์กร AI"}]}, "duties": {"DC1": {"id": "DC1", "th": "ใช้บริการที่ขับเคลื่อนด้วยปัญญาประดิษฐ์ (เช่น เครื่องมือแนะนำช็อปปิ้งออนไลน์ แชทบอทธนาคาร แชทบอทด้านสุขภาพ) โดยตระหนักถึงประโยชน์และความเสี่ยง", "en": "Use AI-enabled services (e.g. online shopping recommendations, automated banking tools, healthcare chatbots) with awareness of their benefits and risks."}, "DC2": {"id": "DC2", "th": "จัดการข้อมูลส่วนบุคคลอย่างรับผิดชอบ ตั้งค่าความเป็นส่วนตัวและเลือกข้อมูลที่จะแชร์ออนไลน์อย่างระมัดระวัง", "en": "Manage personal data responsibly, including applying privacy settings and being selective about what information to share online."}, "DC3": {"id": "DC3", "th": "รับรู้ว่าข้อมูลใดอาจถูกสร้างโดยปัญญาประดิษฐ์ (เช่น ภาพ ข่าว หรือข้อความ) และทราบวิธีการตรวจสอบความถูกต้องและความน่าเชื่อถือ", "en": "Recognise when information may be AI-generated (e.g. images, news, or text) and know how to check for accuracy and reliability."}, "DC4": {"id": "DC4", "th": "ระบุอันตรายที่อาจเกิดขึ้น เช่น ข้อมูลที่ผิด อคติ หรือการหลอกลวง หลีกเลี่ยงการแชร์ข้อมูลที่ผิดหรือรายงานความผิดปกติต่อเจ้าของแพล็ตฟอร์ม", "en": "Identify potential harms, such as misinformation, bias, or scams, and takes steps to avoid or report them."}, "DC5": {"id": "DC5", "th": "มีส่วนร่วมในการอภิปรายสาธารณะเกี่ยวกับปัญญาประดิษฐ์และบทบาทในสังคม", "en": "Engage critically in public debates about AI and its role in society."}, "DW1": {"id": "DW1", "th": "นำเครื่องมือปัญญาประดิษฐ์มาใช้ (เช่น เครื่องมือเพิ่มประสิทธิภาพการทำงาน ระบบทรัพยากรบุคคล แพลตฟอร์มการเงิน แชทบอทบริการลูกค้า) เพื่อสนับสนุนงานประจำวัน", "en": "Engage with and adopt AI tools (e.g. office productivity, HR systems, finance platforms, customer service chatbots) to support day-to-day tasks."}, "DW2": {"id": "DW2", "th": "ใช้ดุลยพินิจทางวิชาชีพในการตีความผลลัพธ์จากปัญญาประดิษฐ์ รับรองผลการตัดสินใจของปัญญาประดิษฐ์ให้เป็นธรรม ถูกต้อง และมีความรับผิดชอบ ปฏิบัติตามนโยบายและแนวปฏิบัติด้านกฎระเบียบและกฎหมาย", "en": "Apply professional judgement when interpreting AI outputs, ensuring decisions remain fair, accurate, and accountable by remaining compliant with regulatory and legal policies and practices"}, "DW3": {"id": "DW3", "th": "ตระหนักรู้ถึงขีดความสามารถและข้อจำกัดของเครื่องมือที่ใช้ รวมถึงวิธีการสร้างผลลัพธ์ ข้อมูลที่เกี่ยวข้อง และจุดที่ต้องการการแทรกแซงของมนุษย์", "en": "Maintain awareness of the capabilities and limitations of the tools they use, including how outputs are generated, what data is involved and where human intervention is required."}, "DW4": {"id": "DW4", "th": "ปกป้องข้อมูลที่มีความละเอียดอ่อนหรือสำคัญต่อธุรกิจเมื่อใช้ระบบปัญญาประดิษฐ์ โดยเฉพาะเมื่อเครื่องมือมาจากภายนอกหรือไม่อยู่ภายใต้นโยบายขององค์กร", "en": "Safeguard sensitive or business-critical information when using AI systems, particularly when tools are external or not governed by organisational policies."}, "DW5": {"id": "DW5", "th": "ติดตามว่าปัญญาประดิษฐ์เปลี่ยนแปลงบทบาทของตนอย่างไร ปรับตัวต่อความรับผิดชอบใหม่ และชี้ให้เห็นโอกาสในการเพิ่มประสิทธิภาพหรือปรับปรุง", "en": "Monitor how AI is changing their role, adapting to new responsibilities and highlighting opportunities for efficiency, or improvement."}, "DW6": {"id": "DW6", "th": "อภิปรายเกี่ยวกับความเสี่ยงด้านงานหรือประเด็นจริยธรรมที่เกี่ยวข้องกับการใช้ปัญญาประดิษฐ์ และมีส่วนร่วมในการเสนอแนวคิดสำหรับการพัฒนาทักษะใหม่และยกระดับทักษะ", "en": "Raise concerns about potential job risks or ethical issues linked to AI use and contribute ideas for reskilling and upskilling."}, "DW7": {"id": "DW7", "th": "ทำหน้าที่เป็นผู้นำการเปลี่ยนแปลงโดยสนับสนุนเพื่อนร่วมงานให้นำปัญญาประดิษฐ์มาใช้อย่างรับผิดชอบ เป็นแบบอย่างที่ดี รายงานความเสี่ยง และช่วยให้ทีมรับมือกับผลกระทบและการเปลี่ยนแปลงที่เกิดขึ้นจากการใช้งานปัญญาประดิษฐ์", "en": "Act as a trusted Change Champion by supporting colleagues to adopt AI responsibly, modelling good practice, escalating risks, and helping teams navigate the human and practical impacts of AI-enabled change."}, "DL1": {"id": "DL1", "th": "กำหนดกลยุทธ์โดยรวมขององค์กรสำหรับการนำปัญญาประดิษฐ์มาใช้ และรับรองว่าสอดคล้องกับวัตถุประสงค์ทางธุรกิจและค่านิยม", "en": "Set the organisation's overall strategy for AI adoption and ensures it aligns with business objectives and values."}, "DL2": {"id": "DL2", "th": "ให้การกำกับดูแลและควบคุมการใช้ปัญญาประดิษฐ์ โดยรับรองการปฏิบัติตามกฎหมาย กฎระเบียบ และหลักการจริยธรรม", "en": "Provide governance and oversight of AI use, ensuring compliance with laws, regulations, and ethical principles."}, "DL3": {"id": "DL3", "th": "ตัดสินใจจัดซื้อจัดจ้างและการลงทุนเกี่ยวกับเครื่องมือ แพลตฟอร์ม และซัพพลายเออร์ภายนอกด้านปัญญาประดิษฐ์", "en": "Make procurement and investment decisions about AI tools, platforms, and external suppliers."}, "DL4": {"id": "DL4", "th": "คาดการณ์ผลกระทบของปัญญาประดิษฐ์ต่อพนักงานและลงทุนในการยกระดับทักษะ การพัฒนาทักษะใหม่ และการจัดการการเปลี่ยนแปลง", "en": "Anticipate workforce impacts of AI and invest in upskilling, reskilling, and change management."}, "DL5": {"id": "DL5", "th": "กำกับดูแลการจัดการความเสี่ยง โดยรับรองความพร้อมขององค์กรสำหรับการตรวจสอบ การรับประกัน และการตอบสนองต่อเหตุการณ์", "en": "Oversee risk management, ensuring organisational readiness for audits, assurance, and incident response."}, "DL6": {"id": "DL6", "th": "ส่งเสริมวัฒนธรรมการใช้ปัญญาประดิษฐ์อย่างรับผิดชอบ สนับสนุนนวัตกรรมภายในขอบเขตที่ปลอดภัยและโปร่งใส", "en": "Promote a culture of responsible AI use, encouraging innovation within safe and transparent boundaries."}, "DL7": {"id": "DL7", "th": "เป็นตัวแทนองค์กรในการอภิปรายกับหน่วยงานกำกับดูแล พันธมิตร และสาธารณะเกี่ยวกับประเด็นปัญญาประดิษฐ์", "en": "Represent the organisation externally in discussions with regulators, partners, and the public on AI issues."}, "DL8": {"id": "DL8", "th": "คาดการณ์และขับเคลื่อนความพร้อมขององค์กรสำหรับกฎระเบียบปัญญาประดิษฐ์ในอนาคต", "en": "Anticipate and drive the organisation's preparedness for future AI regulation."}, "DP1": {"id": "DP1", "th": "ออกแบบ พัฒนา ทดสอบ และบำรุงรักษาโซลูชันที่ขับเคลื่อนด้วยข้อมูลและระบบปัญญาประดิษฐ์ให้ตอบสนองความต้องการทางเทคนิค จริยธรรม และขององค์กร", "en": "Design develop test and maintain data-driven solutions and AI systems to meet technical ethical and organisational requirements."}, "DP2": {"id": "DP2", "th": "ใช้งานและบำรุงรักษาระบบปัญญาประดิษฐ์และไปป์ไลน์ข้อมูลใน production environment เพื่อให้ทำงานได้อย่างต่อเนื่อง ถูกต้อง และปลอดภัย", "en": "Operate and maintain AI systems and data pipelines in production to ensure continuous accurate and safe performance."}, "DP3": {"id": "DP3", "th": "ฝังความปลอดภัย ความเป็นส่วนตัว และการปฏิบัติตามกฎระเบียบไว้ในการออกแบบระบบ สถาปัตยกรรม และเอกสารทางเทคนิคของระบบปัญญาประดิษฐ์", "en": "Embed security privacy and regulatory compliance into AI system design architecture and technical documentation."}, "DP4": {"id": "DP4", "th": "ติดตามประสิทธิภาพของระบบปัญญาประดิษฐ์ และระบุแก้ไขความเสี่ยงทางเทคนิคเชิงรุก เช่น model drift อคติ และช่องโหว่ด้านความปลอดภัย", "en": "Monitor AI system performance and proactively identify and resolve technical risks such as model drift bias and security vulnerabilities."}, "DP5": {"id": "DP5", "th": "ประเมินเครื่องมือ ผู้จำหน่าย และแพลตฟอร์มปัญญาประดิษฐ์โดยใช้กรอบการประเมินที่เป็นระบบ และดูแลกำกับการใช้งาน AI จากบุคคลที่สามอย่างต่อเนื่อง", "en": "Evaluate AI tools vendors and platforms using structured assessment frameworks and maintain ongoing oversight of third-party AI."}, "DP6": {"id": "DP6", "th": "สื่อสารขีดความสามารถ ข้อจำกัด และความไม่แน่นอนของระบบปัญญาประดิษฐ์อย่างชัดเจนแก่ผู้มีส่วนได้ส่วนเสียที่ไม่ใช่นักเทคนิคและผู้ตัดสินใจ", "en": "Communicate AI technical capabilities limitations and uncertainties clearly to non-technical stakeholders and decision-makers."}, "DP7": {"id": "DP7", "th": "นำทีมเทคนิคและกำหนดทิศทางสถาปัตยกรรมระยะยาวและกลยุทธ์การลงทุนด้านเทคโนโลยีสำหรับระบบปัญญาประดิษฐ์", "en": "Lead technical teams and define long-term architecture direction and technology investment strategy for AI systems."}, "DP8": {"id": "DP8", "th": "ระบุโอกาสเชิงรุกในการนำ AI มาใช้ และประเมินความเป็นไปได้ทางเทคนิคเพื่อแก้ปัญหาเชิงกลยุทธ์ขององค์กร", "en": "Proactively identify AI opportunities and assess their technical feasibility to address strategic organisational challenges."}, "DP9": {"id": "DP9", "th": "กำหนดความต้องการของระบบปัญญาประดิษฐ์ จัดเตรียมและกำกับดูแลสินทรัพย์ข้อมูล และปรับการออกแบบโซลูชันให้สอดคล้องกับวัตถุประสงค์ทางธุรกิจและนโยบายองค์กร", "en": "Define AI system requirements prepare and govern data assets and align solution design with business objectives and organisational policy."}, "DP10": {"id": "DP10", "th": "ใช้ดุลยพินิจทางวิชาชีพในการตีความและตัดสินใจบนพื้นฐานผลลัพธ์จากปัญญาประดิษฐ์ เพื่อให้การตัดสินใจมีความเป็นธรรม ถูกต้อง และรับผิดชอบได้", "en": "Apply professional judgement when interpreting and acting on AI outputs ensuring decisions remain fair accurate and accountable."}, "DP11": {"id": "DP11", "th": "มีส่วนร่วมในการประเมินและปรับปรุงโซลูชันปัญญาประดิษฐ์อย่างต่อเนื่อง เพื่อให้แน่ใจว่าโซลูชันยังคงสร้างคุณค่าและเหมาะสมกับบริบทธุรกิจ", "en": "Participate in the evaluation and continuous improvement of AI solutions to ensure sustained business value and relevance."}, "DP12": {"id": "DP12", "th": "นำเสนอและสื่อสารโซลูชันและข้อมูลเชิงลึกจากปัญญาประดิษฐ์อย่างชัดเจนแก่ผู้บริหาร ผู้ใช้งาน และผู้มีส่วนได้ส่วนเสีย", "en": "Present and communicate AI solutions and insights clearly to management end-users and relevant stakeholders."}, "DP13": {"id": "DP13", "th": "กำหนดวิสัยทัศน์ทางธุรกิจและนิยามปัญหาสำหรับโครงการปัญญาประดิษฐ์ จัดลำดับความสำคัญของโอกาสอย่างเป็นระบบ และสร้างความผูกพันของผู้มีส่วนได้ส่วนเสียเพื่อขอทรัพยากรและการสนับสนุน", "en": "Define business vision and problem framing for AI initiatives prioritise opportunities systematically and build stakeholder commitment to secure resources and support."}, "DP14": {"id": "DP14", "th": "ขับเคลื่อนการนำ AI มาใช้อย่างรับผิดชอบภายในหน่วยงานธุรกิจ สนับสนุนทีมในการรับมือการเปลี่ยนแปลง และส่งเสริมการใช้งานที่มีจริยธรรมและมีข้อมูล", "en": "Champion responsible AI adoption within business units supporting teams through change and promoting ethical informed use."}, "DP15": {"id": "DP15", "th": "นำและบริหารการส่งมอบโครงการปรับใช้ปัญญาประดิษฐ์ โดยรับรองคุณภาพ มาตรฐานจริยธรรม การมีส่วนร่วมของผู้มีส่วนได้ส่วนเสีย และการจัดการการเปลี่ยนแปลงอย่างมีประสิทธิภาพ", "en": "Lead and manage the delivery of AI implementation projects ensuring quality ethical standards stakeholder alignment and effective change management."}, "DP16": {"id": "DP16", "th": "ประเมินความเป็นไปได้ทางเทคนิคและทางธุรกิจของโครงการปัญญาประดิษฐ์ โดยระบุและจัดการความเสี่ยงทั้งสองมิติ", "en": "Assess the technical and business feasibility of AI projects identifying and managing risks across both dimensions."}, "DW8": {"id": "DW8", "th": "ส่งเสริมให้การใช้งาน AI ของผู้เรียนมีความปลอดภัย เท่าเทียม และรับผิดชอบ ตรวจสอบว่าเครื่องมือ AI เหมาะสมตามวัย ป้องกันไม่ให้การใช้ AI ทำลายทักษะการคิดและความสามารถในการตัดสินใจของนักเรียน", "en": "Promote safe equitable and responsible AI use among students verify that AI tools are age-appropriate and prevent AI from undermining students' critical thinking and decision-making skills."}, "DW9": {"id": "DW9", "th": "บูรณาการ AI เข้ากับการเรียนการสอนโดยยึดผู้เรียนเป็นศูนย์กลาง ส่งเสริมความสัมพันธ์ทางสังคม การรวมกลุ่ม และความสัมพันธ์ระหว่างครูกับนักเรียน", "en": "Integrate AI into teaching and learning in a student-centred way fostering social connection inclusion and the teacher-student relationship."}, "DW10": {"id": "DW10", "th": "ประเมินผลกระทบของ AI ต่อการสอน การเรียนรู้ และการประเมินผลอย่างมีวิจารณญาณ วางแผนการผสาน AI ในเนื้อหาและประสบการณ์การเรียนรู้", "en": "Critically evaluate the impact of AI on teaching learning and assessment and plan the integration of AI into curriculum content and learning experiences."}, "DW11": {"id": "DW11", "th": "นำเครื่องมือ AI มาใช้เพื่อสนับสนุนการเตรียมหลักสูตร การสอน การเรียนรู้ และการประเมินผลของนักเรียน เพิ่มประสิทธิภาพการทำงานของครูและประสิทธิภาพการเรียนรู้ของนักเรียน โดยรักษาความเป็นมนุษย์ในทุกกระบวนการเรียนการสอน", "en": "Apply AI tools to support curriculum preparation teaching learning and student assessment enhancing teacher effectiveness and learning outcomes while preserving the human dimension of education."}, "DW12": {"id": "DW12", "th": "สอนให้นักเรียนเป็นพลเมืองดิจิทัลที่รับผิดชอบในยุค AI และนำการอภิปรายเกี่ยวกับบทบาทของ AI ในสังคม", "en": "Teach students to be responsible digital citizens in the AI era and facilitate discussions about the role of AI in society."}, "DW13": {"id": "DW13", "th": "รับผิดชอบต่อคุณภาพและความถูกต้องของงานวิจัยที่ใช้ AI รักษาความเป็นอิสระทางปัญญาและการคิดวิเคราะห์อย่างมีวิจารณญาณ ตรวจสอบผลลัพธ์จาก AI และรับผิดชอบต่อข้อผิดพลาดที่อาจเกิดขึ้นจากการใช้ AI", "en": "Take responsibility for the quality and accuracy of AI-assisted research maintain intellectual independence and critical thinking verify AI outputs and be accountable for any errors arising from AI use."}, "DW14": {"id": "DW14", "th": "เปิดเผยการใช้ AI ในงานวิจัยอย่างโปร่งใสและครบถ้วน", "en": "Disclose AI use in research fully and transparently."}, "DW15": {"id": "DW15", "th": "ประเมินและจัดการความเสี่ยงด้านจริยธรรมในการใช้ AI ในงานวิจัย รวมถึงอคติในข้อมูล ความเป็นส่วนตัว ทรัพย์สินทางปัญญา และผลกระทบต่อผู้เข้าร่วมการวิจัย โดยปฏิบัติตามหลักการจริยธรรมการวิจัยและกฎระเบียบที่เกี่ยวข้อง", "en": "Assess and manage ethical risks of using AI in research including data bias privacy intellectual property and impacts on research participants in compliance with research ethics principles and relevant regulations."}, "DW16": {"id": "DW16", "th": "พัฒนาทักษะและความรู้ด้าน AI อย่างต่อเนื่อง เข้าใจข้อจำกัดและความสามารถของเครื่องมือ AI ที่ใช้ในงานวิจัย เรียนรู้วิธีการใช้ AI อย่างมีประสิทธิภาพและติดตามพัฒนาการใหม่ๆ ในสาขาของตน", "en": "Continuously develop AI skills and knowledge understand the capabilities and limitations of AI tools used in research and stay current with emerging developments in the field."}, "DW17": {"id": "DW17", "th": "ส่งเสริมวัฒนธรรมการใช้ AI อย่างรับผิดชอบในชุมชนวิชาการ มีส่วนร่วมในการพัฒนามาตรฐานและแนวทางการใช้ AI ในงานวิจัย และสนับสนุนการพัฒนา AI ที่เน้นมนุษย์เป็นศูนย์กลางและมีจริยธรรม", "en": "Promote a culture of responsible AI use in the academic community contribute to developing standards and guidelines for AI in research and advocate for human-centred and ethical AI development."}}, "trackDuties": {"P1-0": ["DC1", "DC2", "DC3", "DC4", "DC5"], "P2-0": ["DW1", "DW2", "DW3", "DW4", "DW5", "DW6", "DW7"], "P2-1": ["DW8", "DW9", "DW10", "DW11", "DW12"], "P2-2": ["DW13", "DW14", "DW15", "DW16", "DW17"], "P3-0": ["DP1", "DP2", "DP3", "DP4", "DP5", "DP6", "DP7", "DP8"], "P3-1": ["DP9", "DP10", "DP11", "DP12", "DP13", "DP14"], "P3-2": ["DP15", "DP16"], "P4-0": ["DL1", "DL2", "DL3", "DL4", "DL5", "DL6", "DL7", "DL8"]}, "comps": {"DC1": [{"id": "DC1-01", "shortTH": "บอกได้ว่า AI ในชีวิตประจำวันทำงานอย่างไรและจำกัดตรงไหน", "shortEN": "Explain how everyday AI tools function and where they fall short", "dimension": "D", "outcomes": "Recognize & Describe (ตระหนักรู้และอธิบาย):\n- Recognize: ตระหนักถึงการทำงานของ AI ที่แฝงอยู่ในเครื่องมือหรือระบบที่ใช้ในชีวิตประจำวัน\n- Describe: อธิบายข้อจำกัดพื้นฐาน (Limitations) ของ AI ได้ เพื่อไม่คาดหวังผลลัพธ์ที่เกินจริง\n- Understand Data Need: เข้าใจหลักการเบื้องต้นว่า AI ต้องใช้ข้อมูลขององค์กรหรือผู้ใช้ในการเรียนรู้"}, {"id": "DC1-02", "shortTH": "เชื่อมโยงคุณภาพข้อมูลกับความน่าเชื่อถือของผลลัพธ์ AI", "shortEN": "Link data quality to the reliability of AI outputs", "dimension": "B", "outcomes": "Recognize & Provide (ตระหนักรู้และป้อนข้อมูล):\n- Recognize Dependency: ตระหนักว่าคุณภาพและประสิทธิภาพของ AI ขึ้นอยู่กับคุณภาพของข้อมูลที่ป้อนเข้าไป\n- Provide Appropriate Data: สามารถเลือกและให้ข้อมูลตั้งต้นที่เหมาะสมและตรงกับโจทย์ เพื่อให้ระบบ AI ประมวลผลลัพธ์ออกมาได้ดีที่สุด"}, {"id": "DC1-03", "shortTH": "เลือกใช้เครื่องมือ AI และประเมินความคุ้มค่าในบริบทของตน", "shortEN": "Select AI tools and assess their value for personal use contexts", "dimension": "D", "outcomes": "Access & Evaluate (เข้าถึงและประเมินความคุ้มค่า):\n- Access & Use: สามารถเข้าถึงและใช้งานเครื่องมือ AI พื้นฐานได้อย่างถูกต้อง\n- Evaluate Cost-Value: สามารถประเมินความคุ้มค่าในการใช้งาน (Cost-benefit) เพื่อตัดสินใจว่าควรใช้บริการฟรี หรือจำเป็นต้องจ่ายเงินซื้อบริการ/แพ็กเกจเสริมของ AI"}, {"id": "DC1-04", "shortTH": "แยกแยะงานที่ AI เพิ่มคุณค่าจากงานที่ต้องการดุลยพินิจของมนุษย์", "shortEN": "Distinguish tasks where AI adds value from those needing human judgement", "dimension": "C", "outcomes": "Identify & Apply (ระบุโอกาสและประยุกต์ใช้)::\n- Identify Opportunities: สามารถระบุปัญหาหรือโอกาสในงานของตนเอง ที่สามารถนำ AI เข้ามาช่วยเพิ่มประสิทธิภาพได้\n-  Apply to Context: ประยุกต์ใช้ AI ให้เข้ากับสถานการณ์การทำงานจริง โดยเข้าใจทั้งประโยชน์ที่จะได้รับ และข้อจำกัดที่ AI ไม่สามารถทำแทนคนได้ในบริบทงานนั้นๆ\n\n"}], "DC2": [{"id": "DC2-01", "shortTH": "ตั้งค่าความเป็นส่วนตัวและตัดสินใจแชร์ข้อมูลบน AI อย่างมีสติ", "shortEN": "Manage privacy settings and make deliberate data-sharing decisions online", "dimension": "A", "outcomes": "Secure & Comply (รักษาความปลอดภัยและปฏิบัติตาม):\n- Identify Risks: ระบุความเสี่ยงและระมัดระวังในการป้อน/แชร์ข้อมูลส่วนบุคคลลงในระบบ AI\n- Configure Privacy: สามารถตั้งค่าความเป็นส่วนตัว (Privacy Settings) ในแพลตฟอร์ม AI เพื่อป้องกันข้อมูลรั่วไหล\n- Comply: ปฏิบัติตามแนวปฏิบัติพื้นฐานด้านความปลอดภัยสารสนเทศขององค์กรอย่างเคร่งครัด"}], "DC3": [{"id": "DC3-01", "shortTH": "สังเกตสัญญาณเนื้อหาที่สร้างโดย AI และตรวจสอบความถูกต้อง", "shortEN": "Spot signs of AI-generated content and verify its accuracy", "dimension": "E", "outcomes": "Verify & Prevent (ตรวจสอบและป้องกันความเสี่ยง):\n- Verify Accuracy & Fairness: ตรวจสอบความถูกต้องและประเมินความเป็นธรรมของเนื้อหาที่ AI สร้างขึ้น ทุกครั้งก่อนที่จะยอมรับหรือแชร์ต่อ\n- Understand Impact: ตระหนักถึงผลเสียและผลกระทบต่อความน่าเชื่อถือของตนเองและองค์กร หากมีการเผยแพร่ข้อมูลที่เป็นเท็จ (Misinformation) ที่ได้จาก AI"}], "DC4": [{"id": "DC4-01", "shortTH": "อธิบายกลไกที่ AI ก่อให้เกิดอันตราย และรู้วิธีหลีกเลี่ยงหรือรายงาน", "shortEN": "Explain AI harm mechanisms and take steps to avoid or report them", "dimension": "E", "outcomes": "Identify & Respond (ระบุและตอบสนอง):\n- Identify: ระบุลักษณะการใช้งาน AI ที่เป็นอันตรายหรือหลอกลวง (เช่น ข่าวปลอม, Deepfake, Scam) ได้\n- Respond: ตอบสนอง ปฏิเสธการใช้งาน หรือแจ้งเตือนเมื่อพบเห็นผลลัพธ์จาก AI ที่มีอคติหรือไม่เป็นธรรมต่อสังคม"}], "DC5": [{"id": "DC5-01", "shortTH": "ระบุประเด็นจริยธรรม AI และแสดงจุดยืนในการอภิปรายสาธารณะ", "shortEN": "Identify AI ethics issues and engage constructively in public debate", "dimension": "E", "outcomes": "Identify & Reflect (ระบุและสะท้อนคิด):\n- Identify Impact: สามารถระบุประเด็นความเสี่ยงด้านจริยธรรมและผลกระทบทางสังคมที่อาจเกิดจากการใช้ AI ได้\n- Reflect & Listen: สะท้อนคิด (Reflect) ถึงผลกระทบจากการใช้งานของตนเอง และเปิดใจรับฟังมุมมองที่แตกต่างจากผู้อื่นเกี่ยวกับการใช้ AI ในที่ทำงาน"}], "DW3": [{"id": "DW3-01", "shortTH": "อธิบายว่าอะไรกำหนดความน่าเชื่อถือและขอบเขตของเครื่องมือ AI ที่ใช้", "shortEN": "Explain what determines the reliability and limits of AI tools in use", "dimension": "B", "outcomes": "Understand & Intervene (เข้าใจและเข้าควบคุม): \n- Understand Capabilities & Limits: เข้าใจขีดความสามารถและข้อจำกัดของ AI (รู้ว่า AI ทำอะไรได้ดี และเรื่องใดที่ AI ยังทำพลาดบ่อย) เพื่อตั้งความคาดหวังได้ถูกต้อง\n- Decide & Intervene: ตัดสินใจได้ว่างานใดควรให้ AI ช่วย งานใดไม่ควรใช้ และรู้ว่าจังหวะใดที่มนุษย์ต้องเข้าไปแทรกแซงหรือปรับแก้ผลลัพธ์ (Human-in-the-loop)"}], "DW1": [{"id": "DW1-01", "shortTH": "ประเมินเครื่องมือ AI เทียบกับข้อจำกัดและเงื่อนไขเฉพาะของงานตนเอง", "shortEN": "Evaluate AI tools against the specific constraints and needs of own work", "dimension": "D", "outcomes": "Explore & Comply (สำรวจและปฏิบัติตามนโยบาย):\n- Explore & Experiment: เปิดใจสำรวจและทดลองใช้เครื่องมือ AI ใหม่ๆ เพื่อนำมาช่วยทุ่นแรงในการทำงานอย่างตื่นตัวและมีความรับผิดชอบ\n- Comply with Policy: รับทราบและเลือกใช้งานเฉพาะเครื่องมือ AI ที่มหาวิทยาลัยอนุมัติหรือสอดคล้องกับนโยบายขององค์กร (Approved Tools)"}, {"id": "DW1-02", "shortTH": "เขียน Prompt ที่มีประสิทธิภาพและตรวจประเมินคุณภาพผลลัพธ์ AI", "shortEN": "Craft effective prompts and critically assess the quality of AI outputs", "dimension": "C", "outcomes": "Apply & Execute (ประยุกต์ใช้และลงมือทำ):\n- Apply Confidently: ประยุกต์ใช้เครื่องมือ AI ในการทำงานประจำวัน (เช่น ร่างอีเมล, สรุปข้อมูล) ได้อย่างมั่นใจและมีประสิทธิภาพ เพื่อสร้าง Quick Win ให้ตนเอง\n- Execute Safely: ใช้งานฟีเจอร์ต่างๆ ของ AI ได้อย่างปลอดภัย โดยไม่นำพาความเสี่ยงมาสู่ระบบคอมพิวเตอร์ของตนเองหรือองค์กร"}], "DW2": [{"id": "DW2-01", "shortTH": "ระบุรูปแบบข้อผิดพลาดของ AI ก่อนนำผลลัพธ์ไปตัดสินใจในงาน", "shortEN": "Identify AI error patterns before using outputs for professional decisions", "dimension": "E", "outcomes": "Interpret & Judge (ตีความและใช้วิจารณญาณ):\n- Interpret Carefully: อ่านและตีความผลลัพธ์ที่ได้จาก AI อย่างรอบคอบ ไม่หลงเชื่อข้อมูลในทันที (Fact-check)\n- Apply Professional Judgement: ใช้วิจารณญาณและจรรยาบรรณแห่งวิชาชีพ (Professional Judgement) เข้ามาช่วยพิจารณาความถูกต้องและความเหมาะสม ก่อนนำผลลัพธ์ไปใช้งานจริงเสมอ"}, {"id": "DW2-02", "shortTH": "เปิดเผยบทบาทของ AI ในผลงานอย่างโปร่งใสเมื่อทำงานร่วมกับผู้อื่น", "shortEN": "Transparently disclose AI's role in work outputs when collaborating with others", "dimension": "A", "outcomes": "Disclose & Acknowledge (เปิดเผยและตระหนักข้อจำกัด):\n- Disclose: เปิดเผยและอ้างอิงอย่างโปร่งใส (Transparency) เมื่อมีการใช้ AI ช่วยร่างเอกสาร รายงาน หรืองานวิจัย\n- Acknowledge: ตระหนักและระมัดระวังถึงอคติ (Bias) ที่อาจเกิดขึ้นจากผลลัพธ์ของ AI ก่อนนำไปส่งต่อให้ทีมงาน"}], "DW4": [{"id": "DW4-01", "shortTH": "จำแนกประเภทข้อมูลและป้องกันข้อมูลละเอียดอ่อนก่อนป้อนเข้าระบบ AI", "shortEN": "Classify data sensitivity and safeguard confidential information before entering AI systems", "dimension": "A", "outcomes": "Distinguish & Safeguard (จำแนกและปกป้อง):\n- Distinguish Data Types: สามารถแยกแยะได้อย่างรวดเร็วว่าข้อมูลใดเป็นข้อมูลทั่วไป ข้อมูลความลับขององค์กร หรือข้อมูลส่วนบุคคล (Sensitive Data)\n- Safeguard: ปกป้องข้อมูลสำคัญอย่างเคร่งครัด โดยเฉพาะการ \"ไม่ป้อน (Input)\" ข้อมูลความลับลงในเครื่องมือ AI ภายนอก (Public AI Tools) เพื่อให้สอดคล้องกับนโยบาย PDPA"}], "DW5": [{"id": "DW5-01", "shortTH": "สะท้อนคิดว่า AI กำลังเปลี่ยนทักษะและความรับผิดชอบในบทบาทของตนอย่างไร", "shortEN": "Reflect on how AI is reshaping the skills and responsibilities required in own role", "dimension": "E", "outcomes": "Adapt & Participate (ปรับตัวและมีส่วนร่วม):\n- Adapt: ปรับเปลี่ยนกระบวนการทำงาน (Workflow) ของตนเองให้สอดคล้องกับการนำ AI มาช่วยทุ่นแรง\n- Participate: เข้าร่วมกิจกรรม เวทีแลกเปลี่ยน หรือ Workshop ด้าน Digital & AI ที่มหาวิทยาลัยจัดขึ้นอย่างสม่ำเสมอ"}, {"id": "DW5-02", "shortTH": "ระบุแหล่งเรียนรู้ที่เหมาะสมและพัฒนาทักษะ AI ที่เกี่ยวข้องอย่างต่อเนื่อง", "shortEN": "Identify learning sources and continuously build AI skills relevant to own role", "dimension": "E", "outcomes": "Explore & Update (ค้นคว้าและอัปเดตทักษะ):\n- Explore: ค้นคว้าและระบุแหล่งเรียนรู้ (Learning Resources) ด้านเทคโนโลยีใหม่ๆ ที่เชื่อถือได้ด้วยตนเอง\n- Update: พัฒนาทักษะ (Upskill/Reskill) ตนเองให้รู้เท่าทันเครื่องมือ AI ใหม่ๆ ที่สามารถนำมาประยุกต์ใช้ในงานวิชาชีพได้"}], "DW6": [{"id": "DW6-01", "shortTH": "ใช้กรอบเหตุผลเชิงจริยธรรมในการตั้งชื่อและสื่อสารข้อกังวลด้าน AI", "shortEN": "Apply ethical reasoning frameworks to name and communicate AI-related concerns", "dimension": "E", "outcomes": "Discuss & Propose (อภิปรายและเสนอแนะ):\n- Discuss: แลกเปลี่ยนความคิดเห็นและรับฟังมุมมองด้านความเสี่ยงหรือจริยธรรมในการใช้ AI กับเพื่อนร่วมงาน\n- Propose: เสนอแนะแนวทางการใช้ AI อย่างรับผิดชอบภายในภาควิชา หรือหน่วยงานของตนเอง"}], "DW7": [{"id": "DW7-01", "shortTH": "สนับสนุนเพื่อนร่วมงานให้นำ AI มาใช้อย่างรับผิดชอบและรับมือกับผลกระทบ", "shortEN": "Support colleagues to adopt AI responsibly and navigate its human impacts", "dimension": "A", "outcomes": "Guide & Model (แนะนำและเป็นแบบอย่าง):\n- Guide: เป็นพี่เลี้ยง (Peer Support) ให้คำแนะนำเบื้องต้นแก่เพื่อนร่วมงานในการนำ AI มาช่วยลดภาระงาน\n- Model: เป็นต้นแบบ (Role Model) ในการใช้งาน AI อย่างมีประสิทธิภาพ ปลอดภัย และถูกต้องตามจรรยาบรรณวิชาชีพ"}], "DW8": [{"id": "DW8-01", "shortTH": "ประเมินเครื่องมือ AI ตามเกณฑ์ด้านพัฒนาการตามวัยและสวัสดิภาพของนักเรียน", "shortEN": "Evaluate AI tools against student developmental and welfare criteria", "dimension": "A", "outcomes": "Assess & Frame (ประเมินและกำหนดกรอบ):\n- Assess: ประเมินเครื่องมือ AI ตามเกณฑ์ด้านพัฒนาการของนักเรียน ความเป็นส่วนตัว และความเสี่ยงต่อการพึ่งพามากเกินไป\n- Frame: กำหนดกรอบการใช้ AI ในห้องเรียนที่ปกป้องสวัสดิภาพและทักษะการคิดของผู้เรียน"}, {"id": "DW8-02", "shortTH": "กำหนดและสื่อสารแนวปฏิบัติ AI ในห้องเรียนที่คำนึงถึงความเหลื่อมล้ำในการเข้าถึง", "shortEN": "Set and communicate classroom AI guidelines that account for unequal access", "dimension": "C", "outcomes": "Define & Communicate (กำหนดและสื่อสาร):\n- Define: กำหนดขอบเขตและเงื่อนไขการใช้ AI ในชั้นเรียนที่เหมาะสมกับบริบทและระดับชั้นของผู้เรียน\n- Communicate: สื่อสารแนวปฏิบัติเหล่านั้นให้นักเรียนเข้าใจได้ และปรับให้เหมาะสมกับความสามารถในการเข้าถึง AI ที่แตกต่างกันของนักเรียนแต่ละคน"}], "DW9": [{"id": "DW9-01", "shortTH": "ระบุว่า AI เสริมหรือบั่นทอนปฏิสัมพันธ์ระหว่างครูกับนักเรียนในบริบทใด", "shortEN": "Identify when AI enhances versus undermines teacher-student interaction", "dimension": "C", "outcomes": "Explain & Identify (อธิบายและระบุ):\n- Explain: อธิบายหลักการออกแบบการเรียนรู้ที่ใช้ AI เป็นเครื่องมือสนับสนุนโดยไม่แทนที่ปฏิสัมพันธ์ของมนุษย์\n- Identify: ระบุบริบทที่ AI เสริมสร้างการมีส่วนร่วมของผู้เรียนและบริบทที่อาจทำให้ความสัมพันธ์ในชั้นเรียนเสื่อมถอย"}, {"id": "DW9-02", "shortTH": "ออกแบบกิจกรรมที่ใช้ AI โดยรักษาการร่วมมือและปฏิสัมพันธ์ระหว่างนักเรียน", "shortEN": "Design AI-integrated activities that preserve student collaboration and social interaction", "dimension": "D", "outcomes": "Design & Preserve (ออกแบบและรักษา):\n- Design: ออกแบบกิจกรรมที่ผสมผสาน AI อย่างมีจุดประสงค์ โดยไม่ให้ AI ทดแทนกระบวนการคิดและการแสดงออกของนักเรียนเอง\n- Preserve: รักษาองค์ประกอบทางสังคมในชั้นเรียน เช่น การอภิปราย การทำงานกลุ่ม และปฏิสัมพันธ์โดยตรงระหว่างนักเรียนกับครู"}], "DW10": [{"id": "DW10-01", "shortTH": "รวบรวมหลักฐานผลกระทบของ AI ต่อการเรียนรู้อย่างเป็นระบบและแปลงเป็นการปรับหลักสูตร", "shortEN": "Systematically gather evidence of AI's learning impact and translate it into curriculum adjustments", "dimension": "E", "outcomes": "Observe & Translate (สังเกตและแปลงข้อค้นพบ):\n- Observe: รวบรวมและวิเคราะห์หลักฐานเชิงประจักษ์เกี่ยวกับผลกระทบของ AI ต่อการสอนและการเรียนรู้ในห้องเรียนของตนเอง\n- Translate: แปลงข้อค้นพบจากการประเมินเป็นการปรับแผนการสอนและหลักสูตรในรอบถัดไป"}], "DW11": [{"id": "DW11-01", "shortTH": "เลือกและปรับผลลัพธ์ AI ให้เหมาะสมกับวัตถุประสงค์การสอนและกลุ่มผู้เรียน", "shortEN": "Select and adapt AI outputs to match specific teaching objectives and learner needs", "dimension": "D", "outcomes": "Select & Judge (เลือกและตัดสินใจ):\n- Select: เลือกเครื่องมือ AI ที่เหมาะสมกับงานสอนแต่ละประเภทและระดับชั้นของผู้เรียน\n- Judge: ตัดสินว่าผลลัพธ์จาก AI ใดบ้างที่ต้องปรับแก้ก่อนนำไปใช้ และงานใดที่ครูต้องเป็นผู้ตัดสินใจเองโดยไม่พึ่ง AI"}, {"id": "DW11-02", "shortTH": "ออกแบบวิธีวัดผลที่ยังวัดความสามารถจริงของนักเรียนได้แม้มี AI ช่วย", "shortEN": "Design assessments that measure genuine student ability even when AI is accessible", "dimension": "E", "outcomes": "Analyze & Redesign (วิเคราะห์และออกแบบใหม่):\n- Analyze: ระบุรูปแบบการวัดผลที่นักเรียนสามารถใช้ AI ทดแทนการแสดงออกถึงความรู้และทักษะที่แท้จริงของตนเอง\n- Redesign: ออกแบบรูปแบบการประเมินที่ยังคงวัดผลลัพธ์การเรียนรู้ที่ตั้งใจไว้ได้อย่างมีนัยสำคัญ เช่น การเพิ่มส่วนที่ต้องใช้ทักษะเฉพาะตัวหรือการอภิปรายเชิงลึก"}], "DW12": [{"id": "DW12-01", "shortTH": "อำนวยการอภิปรายเชิงวิพากษ์เกี่ยวกับผลกระทบของ AI ในชีวิตของนักเรียน", "shortEN": "Facilitate critical discussions on AI's societal impact anchored in students' lived experience", "dimension": "C", "outcomes": "Design & Facilitate (ออกแบบและอำนวยการ):\n- Design: ออกแบบกิจกรรมและกรณีศึกษาที่ช่วยให้นักเรียนคิดวิเคราะห์เกี่ยวกับ AI ในบริบทที่เชื่อมโยงกับชีวิตจริง\n- Facilitate: อำนวยการอภิปรายที่เปิดโอกาสให้นักเรียนแสดงมุมมองที่หลากหลายต่อประเด็น AI ในสังคม"}], "DW13": [{"id": "DW13-01", "shortTH": "ตรวจสอบผลลัพธ์จาก AI ในงานวิจัยโดยใช้วิธีการทางวิทยาศาสตร์ รวมถึง hallucination", "shortEN": "Verify AI research outputs using research methods, including checking for hallucinations", "dimension": "E", "outcomes": "Verify & Attribute (ตรวจสอบและระบุที่มา):\n- Verify: ตรวจสอบผลลัพธ์จาก AI โดยใช้วิธีการทางวิจัย เช่น การอ้างอิงแหล่งข้อมูลต้นทางและการทดสอบซ้ำ\n- Attribute: ระบุและบันทึกส่วนที่ AI มีส่วนร่วมในงานวิจัยเพื่อรักษาความน่าเชื่อถือและความรับผิดชอบทางวิชาการ"}, {"id": "DW13-02", "shortTH": "สังเกตสัญญาณของการพึ่งพา AI มากเกินไปและรักษาความเป็นอิสระทางปัญญา", "shortEN": "Recognise signs of over-reliance on AI and maintain intellectual independence in research", "dimension": "E", "outcomes": "Recognize & Maintain (รู้จักและรักษา):\n- Recognize: ระบุสัญญาณที่บ่งชี้ว่าตนเองพึ่งพา AI มากเกินไป เช่น การข้ามขั้นตอนการตรวจสอบ การยอมรับผลลัพธ์โดยไม่ตั้งคำถาม หรือการสูญเสียความคิดริเริ่มในงานวิจัย\n- Maintain: รักษาความเป็นอิสระทางปัญญาโดยแยกแยะระหว่างเครื่องมือช่วยวิจัยกับการตัดสินใจทางวิชาชีพที่ต้องมาจากนักวิจัยเอง"}], "DW14": [{"id": "DW14-01", "shortTH": "ปฏิบัติตามมาตรฐานของวารสารและสถาบันในการเปิดเผยการใช้ AI ในงานวิจัย", "shortEN": "Follow journal and institutional standards for disclosing AI use in research", "dimension": "A", "outcomes": "Know & Apply (รู้มาตรฐานและปฏิบัติตาม):\n- Know: รู้ว่าข้อมูลใดบ้าง (เครื่องมือ วัตถุประสงค์ ขอบเขต) ที่ต้องเปิดเผยตามมาตรฐานของสถาบันและวารสาร\n- Apply: บันทึกและรายงานการใช้ AI ในรูปแบบที่ถูกต้องตามแนวปฏิบัติที่กำหนด"}], "DW15": [{"id": "DW15-01", "shortTH": "ประยุกต์กรอบจริยธรรมการวิจัยเพื่อวิเคราะห์ความเสี่ยงเฉพาะจาก AI ในบริบทงานวิจัย", "shortEN": "Apply research ethics frameworks to analyse AI-specific risks in own research context", "dimension": "A", "outcomes": "Apply & Mitigate (ประยุกต์ใช้และลดความเสี่ยง):\n- Apply: ประยุกต์ใช้กรอบจริยธรรมการวิจัยในการวิเคราะห์ความเสี่ยงเฉพาะของ AI ในบริบทงานวิจัยที่ตนรับผิดชอบ\n- Mitigate: ออกแบบมาตรการจัดการความเสี่ยงที่ระบุและบันทึกไว้ในแผนงานวิจัย"}, {"id": "DW15-02", "shortTH": "ป้องกันข้อมูลผู้เข้าร่วมวิจัยและทรัพย์สินทางปัญญาจากความเสี่ยงของ AI บุคคลที่สาม", "shortEN": "Protect participant data and research IP from risks posed by third-party AI platforms", "dimension": "A", "outcomes": "Identify & Protect (ระบุและป้องกัน):\n- Identify: ระบุข้อมูลวิจัยที่มีความเสี่ยงหากนำเข้าสู่ระบบ AI จากบุคคลที่สาม รวมถึงข้อมูลส่วนบุคคลของผู้เข้าร่วมวิจัยและผลงานทางปัญญาของทีมวิจัย\n- Protect: ใช้มาตรการป้องกัน เช่น การ anonymize ข้อมูล การตรวจสอบนโยบายการใช้ข้อมูลของผู้ให้บริการ AI ก่อนใช้งาน"}], "DW16": [{"id": "DW16-01", "shortTH": "สะท้อนคิดการใช้ AI ในงานวิจัยของตนเอง ระบุช่องว่าง และแสวงหาความรู้ที่เหมาะสม", "shortEN": "Reflect on own AI use in research, identify skill gaps, and seek targeted learning", "dimension": "E", "outcomes": "Reflect & Seek (สะท้อนคิดและแสวงหาความรู้):\n- Reflect: ประเมินจุดแข็งและช่องว่างของตนเองในการใช้ AI เพื่องานวิจัยผ่านการสะท้อนคิดหลังการใช้งาน\n- Seek: ระบุและติดตามแหล่งเรียนรู้ที่เหมาะสมกับสาขาวิจัยและเครื่องมือที่ใช้อยู่"}], "DW17": [{"id": "DW17-01", "shortTH": "อธิบายหลักการใช้ AI อย่างรับผิดชอบต่อชุมชนวิชาการและมีส่วนร่วมกำหนดแนวปฏิบัติ", "shortEN": "Articulate responsible AI principles to academic peers and contribute to shared research standards", "dimension": "E", "outcomes": "Articulate & Contribute (อธิบายและมีส่วนร่วม):\n- Articulate: อธิบายหลักการและเหตุผลของการใช้ AI อย่างรับผิดชอบในบริบทงานวิจัยให้เพื่อนร่วมวิชาการเข้าใจได้\n- Contribute: มีส่วนร่วมในการอภิปรายและกำหนดแนวปฏิบัติร่วมกันในชุมชนวิชาการของตนเอง"}], "DP9": [{"id": "DP9-01", "shortTH": "กำหนดความต้องการระบบ AI ที่สอดคล้องกับวัตถุประสงค์ทางธุรกิจและนโยบายองค์กร", "shortEN": "Define AI system requirements aligned with business objectives and organisational policy", "dimension": "C", "outcomes": "Elicit & Align (รวบรวมความต้องการและปรับให้สอดคล้อง):\n- Elicit Requirements: รวบรวมและระบุความต้องการ (Requirements) ทางธุรกิจจากผู้ใช้งาน เพื่อแปลงเป็นโจทย์ในการจัดหาหรือพัฒนาระบบ AI\n- Align Objectives: ปรับความต้องการของระบบ AI ให้สอดคล้องกับนโยบายของมหาวิทยาลัย และมีมาตรฐานที่น่าเชื่อถือ\n- Evaluate Cost-Benefit: มีส่วนร่วมในการประเมินความคุ้มค่า (Cost-effectiveness) ของการนำระบบ AI นั้นมาใช้งาน"}, {"id": "DP9-02", "shortTH": "จัดเตรียมชุดข้อมูลตามมาตรฐานองค์กรสำหรับโครงการ AI", "shortEN": "Prepare and govern datasets to organisational standards for AI projects", "dimension": "B", "outcomes": "Collect & Prepare (รวบรวมและเตรียมข้อมูล):\n- Collect: รวบรวมและจัดเก็บข้อมูลตามมาตรฐานความปลอดภัยและนโยบายของมหาวิทยาลัย\n- Prepare: จัดเตรียมและตรวจสอบความถูกต้องของชุดข้อมูล (Data Quality) ก่อนนำไปใช้พัฒนาหรือป้อนเข้าสู่ระบบ AI"}], "DP2": [{"id": "DP2-01", "shortTH": "ใช้งานและบำรุงรักษาระบบ AI ใน production ให้ทำงานต่อเนื่องและปลอดภัย", "shortEN": "Operate and maintain AI systems in production for continuous, safe performance", "dimension": "D", "outcomes": "Operate & Sustain (ปฏิบัติงานและดูแลระบบให้ยั่งยืน):\n- Operate Solutions: ใช้งานและควบคุมระบบ AI หรือโซลูชันด้านข้อมูลในงานประจำวัน ให้สามารถทำงานได้อย่างถูกต้องและปลอดภัย\n- Maintain System: บำรุงรักษาและแก้ไขปัญหาเบื้องต้น (Troubleshoot) เพื่อให้ระบบมีความพร้อมใช้งานอย่างต่อเนื่อง\n- Support Improvement: รวบรวมปัญหาหรือข้อขัดข้อง (Feedback/Logs) เพื่อส่งต่อให้ทีมพัฒนานำไปปรับปรุงระบบให้ดีขึ้นในอนาคต"}, {"id": "DP2-02", "shortTH": "บำรุงรักษา data pipeline และโครงสร้างพื้นฐานข้อมูลที่สนับสนุนระบบ AI", "shortEN": "Maintain data pipelines and infrastructure that support live AI systems", "dimension": "B", "outcomes": "Execute & Maintain (ดำเนินการและดูแลโครงสร้างพื้นฐาน):\n- Execute Pipelines: ดำเนินการและรันกระบวนการจัดการข้อมูล (Data Pipelines) ตามมาตรฐานที่องค์กรกำหนดไว้\n- Maintain Infrastructure: ดูแลรักษาและตั้งค่า (Configure) เครื่องมือหรือโครงสร้างพื้นฐานที่สนับสนุนการทำงานของ AI\n- Monitor: เฝ้าระวังสถานะการทำงานของระบบจัดการข้อมูล และแจ้งเตือนเมื่อพบความผิดปกติ"}], "DP1": [{"id": "DP1-01", "shortTH": "ออกแบบและพัฒนาโซลูชัน AI ที่ตรงตามความต้องการทางเทคนิค จริยธรรม และองค์กร", "shortEN": "Design and develop AI solutions meeting technical, ethical, and organisational requirements", "dimension": "D", "outcomes": "Design & Develop (ออกแบบและพัฒนาโซลูชัน):\n- Design Solutions: ออกแบบโซลูชัน AI ให้ตอบโจทย์การใช้งานจริงและสอดคล้องกับนโยบายขององค์กร\n- Develop & Integrate: พัฒนาและเชื่อมต่อระบบ AI เข้ากับกระบวนการทำงานหรือแอปพลิเคชันเดิมขององค์กรได้อย่างราบรื่น\n- Ensure Ethics: ตรวจสอบและรับรองว่าโซลูชันที่พัฒนาขึ้น เป็นไปตามมาตรฐานจริยธรรมและไม่สร้างผลกระทบเชิงลบ"}, {"id": "DP1-02", "shortTH": "ออกแบบสถาปัตยกรรมข้อมูลและ data pipeline ที่รองรับการพัฒนาโซลูชัน AI", "shortEN": "Design data architecture and pipelines that underpin AI solution development", "dimension": "B", "outcomes": "Architect & Build (ออกแบบสถาปัตยกรรมและสร้างระบบ):\n- Architect Infrastructure: ออกแบบสถาปัตยกรรมข้อมูล (Data Architecture) ให้รองรับการขยายตัว (Scalable) ตามการเติบโตของมหาวิทยาลัย\n- Build Pipelines: สร้างและปรับปรุง Data Pipelines เพื่อให้การไหลเวียนของข้อมูลมีความน่าเชื่อถือและเสถียร (Reliability)\n- Ensure Safety: ประเมินและเลือกใช้เทคโนโลยีที่เหมาะสม เพื่อรับประกันความปลอดภัยของโครงสร้างระบบตั้งแต่ต้นทาง"}], "DP3": [{"id": "DP3-01", "shortTH": "ฝัง security, privacy และ compliance เข้าในการออกแบบและเอกสารระบบ AI", "shortEN": "Embed security, privacy, and compliance into AI system design and documentation", "dimension": "A", "outcomes": "Secure & Comply (รักษาความปลอดภัยและปฏิบัติตามมาตรฐาน):\n- Design for Privacy: ออกแบบระบบ AI โดยคำนึงถึงความปลอดภัยและความเป็นส่วนตัวของข้อมูลตั้งแต่จุดเริ่มต้น (Privacy by Design)\n- Implement Controls: ติดตั้งและประยุกต์ใช้มาตรการรักษาความปลอดภัยทางข้อมูล (เช่น การเข้ารหัส การปกปิดตัวตน) ในระบบที่พัฒนาขึ้น\n- Ensure Compliance: กำกับดูแลให้ระบบและเครื่องมือสนับสนุนทั้งหมด สอดคล้องกับนโยบายความปลอดภัยของมหาวิทยาลัยและกฎหมายคุ้มครองข้อมูลส่วนบุคคล (PDPA)"}, {"id": "DP3-02", "shortTH": "ออกแบบสถาปัตยกรรม AI ที่ได้มาตรฐาน security ของข้อมูลและให้คำปรึกษาด้านนี้", "shortEN": "Architect AI systems to data security standards and advise on security practices", "dimension": "A", "outcomes": "Architect & Advise (ออกแบบสถาปัตยกรรมและให้คำปรึกษา):\n- Architect: ออกแบบโครงสร้างระบบ AI (System Architecture) โดยฝังมาตรฐานการปกป้องข้อมูลตั้งแต่ระดับโครงสร้าง (Privacy by Design)\n- Advise: ให้คำปรึกษาเชิงลึกแก่ทีมผู้บริหารระดับสูงเกี่ยวกับความพร้อมและความปลอดภัยของสถาปัตยกรรมระบบ"}, {"id": "DP3-03", "shortTH": "จัดทำ audit trail, model card และเอกสารทางเทคนิคที่สื่อสารจุดประสงค์และข้อจำกัดของระบบ", "shortEN": "Produce audit trails, model cards, and technical documentation explaining system purpose and limits", "dimension": "E", "outcomes": "Document & Disclose (จัดทำเอกสารและเปิดเผย)\n- Document: จัดทำเอกสารครบถ้วนตลอด lifecycle ของระบบ AI ได้แก่ วัตถุประสงค์ การออกแบบ ข้อมูลฝึกสอน และผลการประเมิน\n- Disclose: เปิดเผยข้อจำกัดและความเสี่ยงของระบบอย่างโปร่งใส เพื่อให้ผู้ที่เกี่ยวข้องสามารถตัดสินใจได้อย่างมีข้อมูล"}], "DP4": [{"id": "DP4-01", "shortTH": "ออกแบบและตีความตัวชี้วัดติดตามประสิทธิภาพ AI รวมถึง model drift และอคติ", "shortEN": "Design and interpret AI performance metrics including model drift and bias indicators", "dimension": "E", "outcomes": "Test & Monitor (ทดสอบและติดตาม):\n- Test: ทดสอบระบบ AI เพื่อประเมินความแม่นยำ (Accuracy) และประสิทธิภาพก่อนนำไปใช้งานจริง\n- Monitor: ติดตามการทำงานของระบบอย่างต่อเนื่อง เพื่อตรวจหาข้อผิดพลาดหรือความเบี่ยงเบนของผลลัพธ์"}], "DP15": [{"id": "DP15-01", "shortTH": "บริหารโครงการ AI ตั้งแต่ delivery จนถึง change management ให้ได้มาตรฐานจริยธรรม", "shortEN": "Manage AI project delivery and change management to ethical and quality standards", "dimension": "C", "outcomes": "Manage & Assure (บริหารจัดการและรับรอง):\n- Manage: บริหารจัดการโครงการ AI และการเปลี่ยนแปลงในองค์กรให้บรรลุเป้าหมายที่ตั้งไว้\n- Assure: รับรองว่าระบบ AI ถูกออกแบบมาอย่างปลอดภัย มีจริยธรรม และตอบโจทย์การใช้งานจริงของผู้ใช้ (User-centric)"}], "DP7": [{"id": "DP7-01", "shortTH": "วางกลยุทธ์การลงทุนด้านเทคโนโลยี AI ระยะยาวที่สอดคล้องกับทิศทางเชิงกลยุทธ์", "shortEN": "Define long-term AI technology investment strategy aligned with strategic direction", "dimension": "B", "outcomes": "Strategize & Optimize (วางกลยุทธ์และบริหารความคุ้มค่า):\n- Strategize: วางแผนกลยุทธ์และโรดแมปด้านโครงสร้างพื้นฐานระยะยาว (Technology Roadmap) ให้รองรับโจทย์ใหม่ๆ ของมหาวิทยาลัย\n- Optimize: ประเมินและตัดสินใจลงทุนด้านเทคโนโลยีโดยคำนึงถึงความคุ้มค่า (ROI) และประสิทธิภาพการใช้ทรัพยากรสูงสุด"}, {"id": "DP7-02", "shortTH": "นำทีมเทคนิคในการส่งมอบโซลูชัน AI ที่ตอบโจทย์องค์กรตามมาตรฐานที่กำหนด", "shortEN": "Lead technical teams to deliver AI solutions meeting organisational standards and expectations", "dimension": "D", "outcomes": "Lead & Standardize (นำทีมและกำหนดมาตรฐานวิศวกรรม):\n- Lead Development: นำทีมพัฒนาเชิงเทคนิคเพื่อสร้างโซลูชัน AI ที่สามารถนำไปใช้งานแก้ปัญหาได้จริง\n- Standardize: กำหนดและควบคุมมาตรฐานการทำงานเชิงวิศวกรรม (Engineering Standards) ของทีมให้ทัดเทียมมาตรฐานสากล"}], "DP8": [{"id": "DP8-01", "shortTH": "ระบุโอกาสเชิงรุกในการใช้ AI แก้ปัญหาเชิงกลยุทธ์และประเมินความเป็นไปได้ทางเทคนิค", "shortEN": "Proactively identify AI opportunities for strategic challenges and assess technical feasibility", "dimension": "C", "outcomes": "Identify & Assess (ระบุโอกาสและประเมินความเป็นไปได้):\n- Identify: สแกนและระบุโอกาสเชิงรุกในการนำ AI มาแก้ปัญหาเชิงกลยุทธ์ขององค์กร โดยอาศัยความเข้าใจเทคโนโลยีและบริบทขององค์กร\n- Assess: ประเมินความเป็นไปได้ทางเทคนิค (Technical Feasibility) ของโอกาสนั้น รวมถึงข้อจำกัดของข้อมูล โครงสร้างพื้นฐาน และทรัพยากร\n- Translate: แปลงศักยภาพทางเทคนิคให้เป็นการนิยามปัญหาที่ชัดเจนและหลักฐานเชิงประจักษ์ที่ผู้ตัดสินใจสามารถนำไปใช้ประกอบการพิจารณาได้"}], "DP5": [{"id": "DP5-01", "shortTH": "กำหนดมาตรฐานการตรวจสอบระบบ AI ด้านความแม่นยำ ความปลอดภัย และจริยธรรม", "shortEN": "Set organisational AI assessment standards covering accuracy, safety, and ethics", "dimension": "E", "outcomes": "Establish & Assure (กำหนดเกณฑ์และรับรองระบบ):\n- Establish Criteria: กำหนดเกณฑ์และมาตรฐานการตรวจสอบระบบ (Audit Framework) ก่อนนำขึ้นใช้งานจริง\n- Assure: ตรวจสอบและให้การรับรองระบบ AI ทั้งในมิติความแม่นยำ (Accuracy) และผลกระทบด้านความยั่งยืน (Sustainability)"}, {"id": "DP5-02", "shortTH": "ใช้กรอบการประเมินที่เป็นระบบในการประเมินเครื่องมือ แพลตฟอร์ม และผู้จำหน่าย AI", "shortEN": "Use structured frameworks to evaluate AI tools, platforms, and third-party vendors", "dimension": "B", "outcomes": "Evaluate & Recommend (ประเมินและเสนอแนะ):\n- Evaluate: ประเมินเครื่องมือและผู้จำหน่าย AI ตามเกณฑ์ด้านเทคนิค ความปลอดภัย และการปฏิบัติตามข้อกำหนด อย่างเป็นระบบและโปร่งใส\n- Recommend: จัดทำข้อเสนอแนะที่ชัดเจนและมีเหตุผล เพื่อสนับสนุนผู้มีอำนาจตัดสินใจในการเลือกเครื่องมือที่เหมาะสมกับองค์กร"}, {"id": "DP5-03", "shortTH": "คัดเลือกผู้จำหน่าย AI ผ่านกระบวนการประเมินที่เป็นธรรมและอิงหลักฐานเชิงประจักษ์", "shortEN": "Select AI vendors through fair, evidence-based procurement processes", "dimension": "D", "outcomes": "Evaluate & Select (ประเมินและคัดเลือก)\n- Evaluate: ประเมินผู้ให้บริการ (Vendors/Suppliers) ด้าน AI ด้วยเกณฑ์ที่เป็นธรรม โปร่งใส และมีหลักฐานอ้างอิงชัดเจน\n- Select: ตัดสินใจเลือกแพลตฟอร์มเทคโนโลยีที่ตอบโจทย์ความต้องการทางธุรกิจและลดความเสี่ยงระยะยาวให้องค์กร"}], "DL1": [{"id": "DL1-01", "shortTH": "กำหนดนโยบายและกรอบธรรมาภิบาล AI ที่สอดคล้องกับกฎหมายและบริบทองค์กร", "shortEN": "Define organisational AI governance policy and framework aligned with law and context", "dimension": "A", "outcomes": "Formulate & Govern (กำหนดนโยบายและกำกับดูแล):\n- Formulate Policy: กำหนดแนวนโยบายและกรอบธรรมาภิบาล AI (AI Governance Framework) ขององค์กร\n- Govern: กำกับดูแลการใช้งาน AI ในมหาวิทยาลัยให้สอดคล้องกับข้อกฎหมาย (เช่น PDPA) และมาตรฐานจริยธรรมสากล"}, {"id": "DL1-02", "shortTH": "กำหนดกลยุทธ์ข้อมูลและ AI เพื่อสร้างความสามารถในการแข่งขันขององค์กร", "shortEN": "Define a data and AI strategy that builds competitive organisational capability", "dimension": "B", "outcomes": "Strategize & Transform (วางยุทธศาสตร์และพลิกโฉม):\n- Strategize: กำหนดวิสัยทัศน์และยุทธศาสตร์การแปลงข้อมูลให้เป็นสินทรัพย์ (Data Monetization/Value) เพื่อสร้างความได้เปรียบ\n- Transform: ขับเคลื่อนการเตรียมความพร้อมทั้งด้านโครงสร้างระบบ (System) และการพัฒนาบุคลากร (Human Capital)"}], "DP14": [{"id": "DP14-01", "shortTH": "กำหนดแนวทางกำกับดูแลข้อมูลตลอดวงจรชีวิตโครงการ AI", "shortEN": "Define data governance practices to support AI projects across the full lifecycle", "dimension": "B", "outcomes": "Direct & Oversee (กำหนดแนวทางและกำกับวงจรข้อมูล):\n- Direct Workflow: กำหนดขั้นตอนการจัดเก็บ รวบรวม และประมวลผลข้อมูล (Data Lifecycle) ภายในหน่วยงานเพื่อนำมาใช้กับ AI\n- Oversee Safety: กำกับดูแลกระบวนการจัดการข้อมูลของทีมงาน ให้เป็นไปตามมาตรฐานความปลอดภัยและธรรมาภิบาล"}], "DP13": [{"id": "DP13-01", "shortTH": "กำหนดวิสัยทัศน์และโจทย์ธุรกิจสำหรับโครงการ AI พร้อมสร้างการสนับสนุนจาก stakeholder", "shortEN": "Frame the business vision and problem for AI initiatives and build stakeholder commitment", "dimension": "C", "outcomes": "Define & Champion (กำหนดโจทย์และขับเคลื่อน):\n- Define Vision: กำหนดโจทย์ปัญหาและวิสัยทัศน์ที่ชัดเจนในการนำ AI เข้ามาช่วยเพิ่มประสิทธิภาพการทำงาน\n- Champion: เป็นกระบอกเสียงและผู้ขับเคลื่อน (Sponsor/Champion) โครงการ เพื่อสร้างการยอมรับจากทีมงานและผู้ใช้งาน"}], "DP10": [{"id": "DP10-01", "shortTH": "ใช้ดุลยพินิจวิชาชีพในการตีความผลลัพธ์ AI เพื่อการตัดสินใจระดับผู้บริหาร", "shortEN": "Apply professional judgement to interpret AI outputs for accountable management decisions", "dimension": "D", "outcomes": "Interpret & Decide (ตีความและตัดสินใจระดับบริหาร):\n- Interpret: วิเคราะห์และตีความผลลัพธ์ข้อมูลที่ซับซ้อนซึ่งผ่านการประมวลผลโดย AI\n- Decide: ใช้ผลลัพธ์จาก AI มาเป็นหลักฐานประกอบการตัดสินใจเชิงบริหารที่มีผลกระทบสูงต่อหน่วยงาน (Data-Driven Decision)"}], "DP16": [{"id": "DP16-01", "shortTH": "ประเมินความเป็นไปได้ทางเทคนิคและทางธุรกิจของโครงการ AI และบริหารความเสี่ยงทั้งสองมิติ", "shortEN": "Assess AI project feasibility across technical and business dimensions and manage cross-domain risks", "dimension": "D", "outcomes": "Assess Feasibility & Mitigate Risk (ประเมินความเป็นไปได้และลดความเสี่ยง):\n- Assess Feasibility: ประเมินความเป็นไปได้เชิงเทคนิค (Technical Feasibility) ว่าโครงการ AI ที่เสนอมาสามารถทำได้จริงหรือไม่\n- Mitigate Risk: ระบุความเสี่ยงเชิงเทคนิคและวางแผนบริหารจัดการเพื่อป้องกันผลกระทบระหว่างการดำเนินโครงการ"}], "DL8": [{"id": "DL8-01", "shortTH": "วิเคราะห์แนวโน้ม AI ที่กำลังเกิดขึ้นและแปลงเป็นการวางตำแหน่งเชิงกลยุทธ์ขององค์กร", "shortEN": "Analyse emerging AI trends and translate them into strategic organisational positioning", "dimension": "D", "outcomes": "Foresight & Establish Standards (มองการณ์ไกลและกำหนดทิศทาง):\n- Foresight: คาดการณ์แนวโน้มเทคโนโลยี AI (Technology Foresight) และวิเคราะห์ผลกระทบระดับมหาวิทยาลัย\n-  Establish Standards: กำหนดทิศทางและมาตรฐานการใช้งาน AI ระดับองค์กร เพื่อให้เกิดความยั่งยืนและสามารถแข่งขันได้ในอนาคต"}, {"id": "DL8-02", "shortTH": "ติดตามกฎระเบียบ AI ที่กำลังจะมาและเตรียมองค์กรให้พร้อมรับการปฏิบัติตาม", "shortEN": "Track incoming AI regulation and prepare the organisation for future compliance requirements", "dimension": "E", "outcomes": "Monitor & Prepare (ติดตามและเตรียมความพร้อม)\n- Monitor: ติดตามความเคลื่อนไหวของกฎหมายและข้อกำหนดใหม่ๆ ที่เกี่ยวข้องกับดิจิทัลและ AI อย่างใกล้ชิด\n- Prepare: กำหนดทิศทางและเตรียมความพร้อมให้ทุกส่วนงานปฏิบัติตามกฎระเบียบ (Compliance) ได้อย่างถูกต้อง"}], "DL6": [{"id": "DL6-01", "shortTH": "ปลูกฝังวัฒนธรรมการเรียนรู้และการใช้ AI อย่างรับผิดชอบในทุกระดับขององค์กร", "shortEN": "Cultivate an organisation-wide culture of responsible AI learning and use at all levels", "dimension": "E", "outcomes": "Cultivate & Build Trust (ปลูกฝังวัฒนธรรมและสร้างความเชื่อมั่น):\n- Cultivate Culture: ส่งเสริมและปลูกฝังวัฒนธรรมแห่งการเรียนรู้ (Learning Culture) และการใช้ AI อย่างรับผิดชอบทั้งองค์กร\n- Build Trust: สร้างกลไกความโปร่งใสเพื่อดำรงไว้ซึ่งความเชื่อมั่น (Trust) ของสังคมและบุคลากรต่อการใช้ AI ของมหาวิทยาลัย"}], "DL2": [{"id": "DL2-01", "shortTH": "ขับเคลื่อนการใช้ AI ที่มีจริยธรรม ถูกกฎหมาย และรับผิดชอบทั่วทั้งองค์กร", "shortEN": "Drive responsible, ethical, and legally compliant AI use across the organisation", "dimension": "E", "outcomes": "Endorse & Cultivate (สนับสนุนและปลูกฝัง)\n- Endorse: สนับสนุนและผลักดันกรอบธรรมาภิบาล (Governance Framework) เพื่อให้การใช้ AI ในองค์กรถูกกฎหมายและจริยธรรม\n- Cultivate: ปลูกฝังวัฒนธรรมองค์กรที่เน้นความรับผิดชอบและจริยธรรมในการตัดสินใจนำ AI มาใช้"}], "DL4": [{"id": "DL4-01", "shortTH": "วางแผนการจัดการการเปลี่ยนแปลงพนักงานที่เกิดจาก AI รวมถึงการ upskill และ reskill", "shortEN": "Plan workforce change management including upskilling and reskilling for AI-driven change", "dimension": "E", "outcomes": "Plan & Drive (วางแผนและขับเคลื่อน):\n- Plan: วางแผนบริหารจัดการผลกระทบ (Change Management) ที่เกิดจากการนำ AI เข้ามาปรับเปลี่ยนกระบวนการทำงาน\n- Drive: ขับเคลื่อนยุทธศาสตร์การพัฒนาทักษะ (Upskill/Reskill) เพื่อเตรียมความพร้อมให้บุคลากรทำงานร่วมกับ AI ได้"}], "DL5": [{"id": "DL5-01", "shortTH": "บริหารความเสี่ยง AI ภายในกรอบความเสี่ยงองค์กรและรับรองความพร้อมสำหรับการตรวจสอบ", "shortEN": "Manage AI risk within the enterprise framework ensuring audit and incident response readiness", "dimension": "E", "outcomes": "Manage Risk & Readiness (จัดการความเสี่ยงและเตรียมพร้อม)\n- Manage Risk: บูรณาการความเสี่ยงด้าน AI เข้ากับกรอบการบริหารความเสี่ยงระดับองค์กร (Enterprise Risk Management)\n- Ensure Readiness: รับรองความพร้อมขององค์กรในการรับมือและตรวจสอบเมื่อเกิดเหตุการณ์ฉุกเฉินจากระบบ AI (Incident Response)"}], "DL7": [{"id": "DL7-01", "shortTH": "เป็นตัวแทนองค์กรในการอภิปรายนโยบาย AI ระดับภายนอกกับผู้กำกับดูแลและพันธมิตร", "shortEN": "Represent the organisation in external AI policy discussions with regulators and partners", "dimension": "E", "outcomes": "Advocate & Build Trust (เป็นกระบอกเสียงและสร้างความเชื่อมั่น)\n- Advocate: เป็นตัวแทนองค์กรในการสื่อสารและอภิปรายนโยบายด้าน AI กับหน่วยงานภาครัฐหรือเครือข่ายภายนอก\n- Build Trust: สร้างความไว้วางใจ (Trust) ต่อสาธารณะและสังคม ว่ามหาวิทยาลัยมีการใช้ AI อย่างรับผิดชอบและโปร่งใส"}], "DP11": [{"id": "DP11-01", "shortTH": "มีส่วนร่วมในการประเมินและปรับปรุงโซลูชัน AI เพื่อให้สร้างคุณค่าทางธุรกิจอย่างต่อเนื่อง", "shortEN": "Participate in ongoing AI solution evaluation and improvement to sustain business value", "dimension": "E", "outcomes": "Evaluate & Improve (ประเมินและปรับปรุง)\n- Evaluate: มีส่วนร่วมในการติดตามและประเมินผลลัพธ์จากการใช้โซลูชัน AI ในบริบทการทำงานจริง\n- Improve: เสนอแนะแนวทางปรับปรุงระบบ AI ให้มีประสิทธิภาพ คงความรับผิดชอบ และสอดคล้องกับรูปแบบงานที่เปลี่ยนไป"}], "DP6": [{"id": "DP6-01", "shortTH": "สื่อสารขีดความสามารถ ข้อจำกัด และความไม่แน่นอนของระบบ AI ให้ผู้ที่ไม่ใช่นักเทคนิคเข้าใจ", "shortEN": "Communicate AI capabilities, limitations, and uncertainties to non-technical audiences", "dimension": "C", "outcomes": "Communicate & Assure (สื่อสารและรับรองเชิงเทคนิค)\n- Communicate: อธิบายการทำงานของโมเดล AI และวงจรข้อมูล (Data Lifecycle) ให้ผู้ใช้ทั่วไปและผู้บริหารเข้าใจได้ง่าย\n- Assure: ให้การรับรองในเชิงเทคนิคว่าระบบถูกออกแบบมาอย่างถูกต้องตามข้อกำหนด และไม่ละเมิดหลักจริยธรรม"}], "DP12": [{"id": "DP12-01", "shortTH": "นำเสนอโซลูชันและข้อมูลเชิงลึกจาก AI ต่อผู้บริหารและผู้มีส่วนได้ส่วนเสียอย่างชัดเจน", "shortEN": "Present AI solutions and insights clearly to management and relevant stakeholders", "dimension": "C", "outcomes": "Present & Facilitate (นำเสนอและอำนวยความสะดวก)\n- Present: นำเสนอโซลูชัน AI โดยอธิบายประโยชน์ ความเสี่ยง และข้อควรระวังให้ผู้ใช้งานเข้าใจเพื่อประกอบการตัดสินใจ\n- Facilitate: อำนวยความสะดวกในการจัดทำรายงานความคืบหน้าและผลการดำเนินงานของโครงการ AI อย่างโปร่งใส"}], "DL3": [{"id": "DL3-01", "shortTH": "ตัดสินใจจัดซื้อและลงทุน AI เชิงกลยุทธ์โดยชั่งน้ำหนัก TCO ความเสี่ยง และ vendor dependency", "shortEN": "Make strategic AI procurement decisions weighing total cost, risk, and vendor dependency", "dimension": "B", "outcomes": "Evaluate Strategically & Decide (ประเมินเชิงกลยุทธ์และตัดสินใจ)\n- Evaluate Strategically: ประเมินตัวเลือกการจัดซื้อ AI โดยพิจารณาต้นทุนรวม ความเสี่ยงจากผู้จำหน่าย และความสอดคล้องกับกลยุทธ์องค์กร โดยอิงจากข้อเสนอแนะของทีมเทคนิค\n- Decide & Justify: ตัดสินใจลงทุนได้อย่างมีเหตุผล โปร่งใส และสามารถอธิบายความสมเหตุสมผลต่อผู้มีส่วนได้ส่วนเสียได้"}]}};
+
+const PC={
+  P1:{bg:'rgba(107,114,128,.08)',border:'rgba(107,114,128,.3)',text:'#4B5563',accent:'#6B7280'},
+  P2:{bg:'rgba(232,71,16,.08)',border:'rgba(232,71,16,.3)',text:'#C73E0C',accent:'#E84710'},
+  P3:{bg:'rgba(91,33,182,.07)',border:'rgba(91,33,182,.3)',text:'#5B21B6',accent:'#5B21B6'},
+  P4:{bg:'rgba(180,83,9,.08)',border:'rgba(180,83,9,.3)',text:'#92400E',accent:'#B45309'},
+};
+const DC={A:'#0891b2',B:'#059669',C:'#7c3aed',D:'#2563eb',E:'#d97706'};
+const DL={A:'Privacy',B:'Data',C:'Communication',D:'Problem Solving',E:'Evaluation'};
+
+let state={persona:'P1',track:'P1-0',view:'duties'};
+
+function init(){
+  buildPersonaBtns();
+  document.querySelectorAll('.cb-view-btn').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.view)));
+  selectPersona('P1');
+}
+
+function buildPersonaBtns(){
+  const el=document.getElementById('cbPersonas');
+  el.innerHTML=D.personas.map(p=>{
+    const c=PC[p.id];
+    return `<button class="cb-persona-btn" data-pid="${p.id}"
+      style="--cb-bg:${c.bg};--cb-border:${c.border};--cb-text:${c.text};--cb-accent:${c.accent}"
+      onclick="cbPersona('${p.id}')"
+    ><span class="cb-pid">${p.id}</span><span class="cb-pth">${p.labelTH}</span><span class="cb-pen">${p.labelEN}</span></button>`;
+  }).join('');
+}
+
+function selectPersona(pid){
+  state.persona=pid; state.track=D.tracks[pid][0].id;
+  const c=PC[pid];
+  document.documentElement.style.setProperty('--cb-accent',c.accent);
+  document.documentElement.style.setProperty('--cb-bg',c.bg);
+  document.documentElement.style.setProperty('--cb-text',c.text);
+  document.querySelectorAll('.cb-persona-btn').forEach(b=>b.classList.toggle('active',b.dataset.pid===pid));
+  const tracks=D.tracks[pid];
+  const tc=document.getElementById('cbTracks');
+  if(tracks.length>1){
+    tc.style.setProperty('--cb-accent',c.accent);
+    tc.innerHTML=tracks.map(t=>`<button class="cb-track-btn${t.id===state.track?' active':''}" data-tid="${t.id}" onclick="cbTrack('${t.id}')">${t.nameTH}</button>`).join('');
+    tc.style.display='flex';
+  }else{
+    tc.style.display='none';
+  }
+  render();
+}
+
+function selectTrack(tid){
+  state.track=tid;
+  document.querySelectorAll('.cb-track-btn').forEach(b=>b.classList.toggle('active',b.dataset.tid===tid));
+  render();
+}
+
+function setView(v){
+  state.view=v;
+  document.querySelectorAll('.cb-view-btn').forEach(b=>b.classList.toggle('active',b.dataset.view===v));
+  render();
+}
+
+function render(){
+  const dids=D.trackDuties[state.track]||[];
+  const duties=dids.map(id=>D.duties[id]).filter(Boolean);
+  const el=document.getElementById('cbContent');
+  if(state.view==='duties') el.innerHTML=renderDuties(duties);
+  else if(state.view==='competencies') el.innerHTML=renderComps(duties);
+  else el.innerHTML=renderOutcomes(duties);
+}
+
+function renderDuties(duties){
+  return '<div class="cb-duties-list">'+duties.map((d,i)=>
+    `<div class="cb-duty-item"><span class="cb-duty-num">${i+1}</span><div><p class="cb-duty-th">${esc(d.th)}</p><p class="cb-duty-en">${esc(d.en)}</p></div></div>`
+  ).join('')+'</div>';
+}
+
+function renderComps(duties){
+  return duties.map(d=>{
+    const comps=D.comps[d.id]||[];
+    if(!comps.length)return'';
+    return`<div class="cb-comp-group">
+      <div class="cb-comp-duty-hdr"><span class="cb-comp-duty-id">${d.id}</span><span class="cb-comp-duty-text">${esc(d.th)}</span></div>
+      <div class="cb-comp-cards">${comps.map(c=>{
+        const col=DC[c.dimension]||'#666';
+        return`<div class="cb-comp-card" style="--dim-c2:${col};--dim-bg2:${col}18;border-top-color:${col}">
+          <div class="cb-dim-badge">${c.dimension}: ${DL[c.dimension]||c.dimension}</div>
+          <p class="cb-comp-short-th">${esc(c.shortTH)}</p>
+          <p class="cb-comp-short-en">${esc(c.shortEN)}</p>
+        </div>`;
+      }).join('')}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderOutcomes(duties){
+  const all=duties.flatMap(d=>(D.comps[d.id]||[]).map(c=>Object.assign({duty:d},c)));
+  return'<div class="cb-lo-list">'+all.map(c=>{
+    const lo=parseLO(c.outcomes);
+    const col=DC[c.dimension]||'#666';
+    return`<div class="cb-lo-row">
+      <div class="cb-lo-comp">
+        <div class="cb-dim-badge" style="--dim-c2:${col};--dim-bg2:${col}18;border-color:${col}40;background:${col}18;color:${col}">${c.dimension}: ${DL[c.dimension]||c.dimension}</div>
+        <p class="cb-lo-comp-th">${esc(c.shortTH)}</p>
+        <p class="cb-lo-comp-en">${esc(c.shortEN)}</p>
+      </div>
+      <div class="cb-lo-outcome">${lo?`<p class="cb-lo-hdr">${esc(lo.header)}</p><ul class="cb-lo-bullets">${lo.bullets.map(b=>`<li>${esc(b)}</li>`).join('')}</ul>`:''}</div>
+    </div>`;
+  }).join('')+'</div>';
+}
+
+function parseLO(raw){
+  if(!raw||!raw.trim())return null;
+  const lines=raw.trim().split('\n').map(l=>l.trim()).filter(Boolean);
+  if(!lines.length)return null;
+  const header=lines[0].replace(/:$/,'').trim();
+  const bullets=lines.slice(1).filter(l=>l.startsWith('-')).map(l=>l.replace(/^-\s*/,'').trim()).filter(Boolean);
+  return{header,bullets};
+}
+
+function esc(s){
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+window.cbPersona=selectPersona;
+window.cbTrack=selectTrack;
+document.readyState==='loading'?document.addEventListener('DOMContentLoaded',init):init();
+})();
+</script>
+
+
+<!-- JOURNEY -->
+<section id="journey">
+  <div class="container">
+    <div class="fade-in">
+      <h2 class="section-title">เส้นทางพัฒนา 5 ขั้นตอน</h2>
+      <p class="section-subtitle">การประเมินเป็นเพียงจุดเริ่มต้นของวงจรพัฒนาต่อเนื่อง ผลประเมินนำไปสู่แผนการเรียนรู้ที่ออกแบบเฉพาะรายบุคคล</p>
+    </div>
+    <div class="journey-steps fade-in">
+      <div class="journey-step" style="--step-color: var(--orange);">
+        <div class="step-circle">📋</div>
+        <div class="step-num">ขั้นที่ 01</div>
+        <h4>ประเมินตนเอง</h4>
+        <p>บุคลากรทำ AI Behavior Assessment ประเมิน Competencies ครอบคลุม 5 มิติ โดยระบุระดับการปฏิบัติจริงในงานประจำวัน</p>
+      </div>
+      <div class="journey-step" style="--step-color: #3B82F6;">
+        <div class="step-circle">📚</div>
+        <div class="step-num">ขั้นที่ 02</div>
+        <h4>เลือกแหล่งเรียนรู้</h4>
+        <p>ระบบแนะนำหลักสูตรที่ตรงกับมิติที่ต้องพัฒนา เช่น Coursera, LEB2, Microsoft Copilot Training หรือ KMUTT AI Portal</p>
+      </div>
+      <div class="journey-step" style="--step-color: #8B5CF6;">
+        <div class="step-circle">🎯</div>
+        <div class="step-num">ขั้นที่ 03</div>
+        <h4>พัฒนาทักษะตามบทบาท</h4>
+        <p>บุคลากรสายวิชาการเรียนรู้ตามแนวทาง UNESCO AI Competency บุคลากรสายสนับสนุนเรียนรู้ตามแนวทาง Alan Turing Institute AI Skills for Business</p>
+      </div>
+      <div class="journey-step" style="--step-color: #F59E0B;">
+        <div class="step-circle">🏅</div>
+        <div class="step-num">ขั้นที่ 04</div>
+        <h4>รับการรับรอง</h4>
+        <p>บุคลากรสายสนับสนุนที่ผ่านเกณฑ์จะได้รับ KMUTT Micro-credential บุคลากรสายวิชาการได้รับการรับรองผ่านกรอบ PSF</p>
+      </div>
+      <div class="journey-step" style="--step-color: var(--dim-e);">
+        <div class="step-circle">🔄</div>
+        <div class="step-num">ขั้นที่ 05</div>
+        <h4>ติดตามและปรับปรุงต่อเนื่อง</h4>
+        <p>ข้อมูล AI Competency ถูกติดตามผ่าน Power BI Dashboard แต่ละหน่วยงานแบ่งปัน Use Cases และเฟรมเวิร์คปรับตามพัฒนาการของเทคโนโลยี</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ASSESSMENT -->
+<section id="assessment">
+  <div class="container">
+    <div class="fade-in">
+      <p class="section-label">เครื่องมือวัดสมรรถนะ</p>
+      <h2 class="section-title">แบบสํารวจพฤติกรรม AI</h2>
+      <p class="section-subtitle">แบบประเมินตนเองที่เชื่อมโยงกับ 5 มิติสมรรถนะ ออกแบบสำหรับบุคลากรกลุ่ม AI Worker ซึ่งเป็นประชากรส่วนใหญ่ขององค์กร</p>
+    </div>
+    <div class="assessment-grid fade-in">
+      <div class="assessment-info">
+        <h3 style="color:white; font-size:1.2rem; margin-bottom:1rem;">ระดับสมรรถนะ</h3>
+        <p style="color:rgba(255,255,255,0.6); font-size:0.9rem; margin-bottom:1.5rem;">Scale 4 ระดับนี้วัดพฤติกรรมที่สังเกตได้จริงในการทำงาน ไม่ใช่ความรู้เชิงทฤษฎี ผลที่ได้จึงนำไปวางแผนพัฒนาบุคลากรได้อย่างตรงจุด ทั้งในระดับบุคคลและระดับองค์กร</p>
+        <div class="scale-items">
+          <div class="scale-item"><div class="scale-num">0</div><div><div class="scale-label">ไม่เคยทำ</div><div class="scale-desc">ยังไม่มีประสบการณ์กับพฤติกรรมนี้</div></div></div>
+          <div class="scale-item"><div class="scale-num">1</div><div><div class="scale-label">ทำแต่ไม่ชำนาญ</div><div class="scale-desc">เคยลองทำ แต่ยังต้องการการแนะนำ</div></div></div>
+          <div class="scale-item"><div class="scale-num">2</div><div><div class="scale-label">ทำเป็นประจำ</div><div class="scale-desc">ปฏิบัติได้สม่ำเสมอและเป็นอิสระ</div></div></div>
+          <div class="scale-item"><div class="scale-num">3</div><div><div class="scale-label">เชี่ยวชาญ จนสอนคนอื่นได้</div><div class="scale-desc">เป็นแบบอย่างและถ่ายทอดให้ผู้อื่นได้</div></div></div>
+        </div>
+        <div style="margin-top:2rem; padding:1.5rem; background:rgba(255,255,255,0.08); border-radius:16px;">
+          <h4 style="color:#FFB347; font-size:0.9rem; margin-bottom:0.75rem;">ขั้นตอนการประเมิน</h4>
+          <p style="color:rgba(255,255,255,0.7); font-size:0.82rem; line-height:1.8;">
+            บุคลากรทุกคนเริ่มต้นด้วยการตอบ <strong style="color:white;">แบบสอบถามระบุ Persona</strong> เพื่อจำแนกว่าตนเองอยู่ในกลุ่มใด ได้แก่ AI Worker, AI Professional หรือ AI Teacher จากนั้นบุคลากรกลุ่ม AI Worker จะประเมินตนเองใน <strong style="color:white;">22 พฤติกรรม</strong> ครอบคลุมทั้ง 5 มิติสมรรถนะ โดยสะท้อนการปฏิบัติจริงในงานประจำวัน
+          </p>
+        </div>
+      </div>
+      <div class="radar-container">
+        <h4>ตัวอย่างโปรไฟล์: AI Worker</h4>
+        <canvas id="radarChart"></canvas>
+        <div style="display:flex; justify-content:center; gap:1rem; margin-top:1rem; flex-wrap:wrap;">
+          <div style="display:flex;align-items:center;gap:5px;font-size:0.72rem;color:rgba(255,255,255,0.6);"><span style="width:10px;height:2px;background:rgba(232,71,16,0.8);display:inline-block;"></span>ปัจจุบัน</div>
+          <div style="display:flex;align-items:center;gap:5px;font-size:0.72rem;color:rgba(255,255,255,0.6);"><span style="width:10px;height:2px;background:rgba(255,255,255,0.3);display:inline-block;border-top:1px dashed rgba(255,255,255,0.4);"></span>เป้าหมาย</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>Developed by <strong>ALEX — AI Research Center, KMUTT</strong> · AI Competency Framework for KMUTT Staff 2026</p>
+  <p style="margin-top:6px;">Grounded in Alan Turing Institute (AI Skills for Business) &amp; UNESCO (AI Competency for Teachers) frameworks</p>
+</footer>
+
+<script>
+// Smooth scroll animations
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+// Tab switching
+function showTab(id, btn) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// Competency browser filter
+let activeDim = 'all';
+function filterDim(dim, btn) {
+  activeDim = dim;
+  document.querySelectorAll('.dim-filter-btn').forEach(b => {
+    b.classList.remove('active');
+    b.style.color = b.style.borderColor; // restore original color
+    b.style.background = 'white';
+  });
+  btn.classList.add('active');
+  btn.style.background = btn.style.borderColor;
+  btn.style.color = 'white';
+  filterCompetencies();
+}
+function filterCompetencies() {
+  const search = document.querySelector('.browser-search').value.toLowerCase();
+  document.querySelectorAll('.comp-row').forEach(row => {
+    const dimMatch = activeDim === 'all' || row.dataset.dim === activeDim;
+    const textMatch = !search || row.dataset.text.toLowerCase().includes(search) || row.textContent.toLowerCase().includes(search);
+    row.classList.toggle('hidden', !(dimMatch && textMatch));
+  });
+}
+
+// Radar chart
+const ctx = document.getElementById('radarChart').getContext('2d');
+new Chart(ctx, {
+  type: 'radar',
+  data: {
+    labels: ['A: Privacy', 'B: Data', 'C: Comm', 'D: Solving', 'E: Reflection'],
+    datasets: [
+      {
+        label: 'Example Profile',
+        data: [75, 60, 80, 55, 85],
+        backgroundColor: 'rgba(232,71,16,0.2)',
+        borderColor: 'rgba(232,71,16,0.8)',
+        borderWidth: 2, pointBackgroundColor: 'rgba(232,71,16,0.9)',
+        pointRadius: 4,
+      },
+      {
+        label: 'AI Worker Target',
+        data: [67, 67, 67, 67, 67],
+        backgroundColor: 'rgba(255,255,255,0.05)',
+        borderColor: 'rgba(255,255,255,0.3)',
+        borderWidth: 1, borderDash: [4,4],
+        pointBackgroundColor: 'rgba(255,255,255,0.4)',
+        pointRadius: 3,
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: {
+      r: {
+        min: 0, max: 100,
+        ticks: { stepSize: 25, color: 'rgba(255,255,255,0.4)', backdropColor: 'transparent', font: { size: 9 } },
+        grid: { color: 'rgba(255,255,255,0.1)' },
+        angleLines: { color: 'rgba(255,255,255,0.1)' },
+        pointLabels: { color: 'rgba(255,255,255,0.7)', font: { size: 11, weight: '600' } }
+      }
+    }
+  }
+});
+
+// Fix active dim filter button initial state
+document.querySelector('.dim-filter-btn.active').style.background = '#6B7280';
+document.querySelector('.dim-filter-btn.active').style.color = 'white';
+</script>
+</body>
+</html>
